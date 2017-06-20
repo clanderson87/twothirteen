@@ -1,0 +1,16 @@
+export const FACEBOOK_LOGIN_SUCCESS = 'facebook_login_success';
+export const FACEBOOK_LOGIN_FAIL = 'facebook_login_fail';
+export const HAS_USED = 'has_used';
+export const REGION_SET = 'region_set';
+export const ERROR = 'error';
+export const IMAGE_SELECTED = 'image_selected';
+export const IMAGE_CANCELLED = 'image_cancelled';
+export const TOGGLE_PICKER = 'toggle_picker';
+export const BAR_CODE_READ = 'bar_code_read';
+export const GOOGLE_LOGIN_FAIL = 'google_login_fail';
+export const GOOGLE_LOGIN_SUCCESS = 'google_login_success';
+export const RECORDING_ACTIVE = 'recording_active';
+export const RECORDING_PAUSED = 'recording_paused';
+export const SOUND_LOADED = 'sound_loaded';
+export const SOUND_PLAYING = 'sound_playing';
+export const NEAUTRALIZE_STATE = 'neautralize_state';
