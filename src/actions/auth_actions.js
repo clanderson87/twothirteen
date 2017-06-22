@@ -22,10 +22,12 @@ import { fbPermissions, googleScopes } from '../CUSTOM_CONFIG';
 //AsyncStorage.getItem('fb_token');
 //returns promise
 
-export const facebookLogin = () => async dispatch => {
-  let token = await AsyncStorage.getItem('fb_token');
+export const facebookLogin = (token = null) => async dispatch => {
+  if(token === null){
+    token = await AsyncStorage.getItem('fb_token');
+  };
   if (token) {
-    firebaseLogin(token, dispatch);
+    firebaseLogin(token, dispatch, 'facebook');
     dispatch({ type: FACEBOOK_LOGIN_SUCCESS, payload: token });
   } else {
     doFacebookLogin(dispatch);
@@ -38,25 +40,31 @@ const doFacebookLogin = async dispatch => {
   if(type ==='cancel'){
     return dispatch({ type: FACEBOOK_LOGIN_FAIL });
   };
-  firebaseLogin(token, dispatch);
+  firebaseLogin(token, dispatch, 'facebook');
   await AsyncStorage.setItem('fb_token', token);
   dispatch({ type: FACEBOOK_LOGIN_SUCCESS, payload: token });
 };
 
-const firebaseLogin = (token, dispatch) => {
-  console.log('in Firebase Login!');
-  let credential = firebase.auth.FacebookAuthProvider.credential(token);
-  console.log('credential is', credential)
-  
+const firebaseLogin = (token, dispatch, provider) => {
+  let credential = new String();
+  if (provider === 'facebook'){
+    credential = firebase.auth.FacebookAuthProvider.credential(token);
+  } else if (provider === 'google'){
+    credential = firebase.auth.GoogleAuthProvider.credential(token);
+  };
+
   firebase.auth().signInWithCredential(credential).catch(error => {
     return dispatch({ type: ERROR, payload: error });
   });
 }
 
-export const googleLogin = () => async dispatch => {
-  let token = AsyncStorage.getItem('google_token');
+export const googleLogin = (token = null) => async dispatch => {
+  if(token === null){
+    token = await AsyncStorage.getItem('google_token');
+  };
   if (token) {
-    dispatch({ type: GOOGLE_LOGIN_SUCCESS, payload: token});
+    firebaseLogin(token, dispatch, 'google');
+    return dispatch({ type: GOOGLE_LOGIN_SUCCESS, payload: token});
   } else {
     doGoogleLogin(dispatch);
   }
@@ -66,15 +74,14 @@ const doGoogleLogin = async dispatch => {
   let { type, accessToken } = await Google.logInAsync({ 
     scopes: googleScopes, 
     androidClientId, 
-    iosClientId, 
-    iosStandaloneAppClientId, 
-    androidStandaloneAppClientId
+    iosClientId
   });
   
   if(accessToken === 'cancel'){
     return dispatch({ type: GOOGLE_LOGIN_FAIL });
-  }
+  };
 
+  firebaseLogin(accessToken, dispatch, 'google');
   await AsyncStorage.setItem('google_token', accessToken);
-  dispatch({ type: GOOGLE_LOGIN_SUCCESS, payload: token });
+  return dispatch({ type: GOOGLE_LOGIN_SUCCESS, payload: accessToken });
 };

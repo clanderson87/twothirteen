@@ -1,10 +1,10 @@
 import { StackNavigator } from 'react-navigation';
-import ReviewScreen from '../screens/ReviewScreen';
+import DashboardScreen from '../screens/DashboardScreen';
 import SettingsScreen from '../screens/SettingsScreen'; 
 
 const SubFlowStackNavigator = StackNavigator({
-  review: { screen: ReviewScreen },
-  settings: { screen: SettingsScreen }
+  Dashboard: { screen: DashboardScreen },
+  Settings: { screen: SettingsScreen }
 });
 
 export default SubFlowStackNavigator;

@@ -7,9 +7,7 @@ import { checkForUsage } from '../actions';
 
 class WelcomeScreen extends Component {
   componentDidMount = async () => {
-    // AsyncStorage.removeItem(versionNumber); //FOR DEBUGGING PURPOSES
-    // AsyncStorage.removeItem('fb_token');
-    console.log('on welcome screen');
+    //AsyncStorage.multiRemove([versionNumber, 'fb_token', 'google_token']) //=> for debugging purposes ONLY!
     await this.props.checkForUsage();
     if(this.props.hasUsed){
       this.onSlidesComplete();
@@ -18,7 +16,7 @@ class WelcomeScreen extends Component {
   
   onSlidesComplete = () => {
     if(this.props.token){
-      this.props.navigation.navigate('map');
+      this.props.navigation.navigate('Map');
     } else {
       this.props.navigation.navigate('auth');
     }

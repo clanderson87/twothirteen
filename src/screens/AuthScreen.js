@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, Button } from 'react-native';
+import { View, AsyncStorage } from 'react-native';
+import { SocialIcon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { facebookLogin, googleLogin } from '../actions';
 
 class AuthScreen extends Component {
   componentDidMount(){
-    this.props.facebookLogin();
+    this.tryLoginProviders();
     this.onAuthComplete(this.props);
   }
 
@@ -14,15 +15,42 @@ class AuthScreen extends Component {
   }
 
   onAuthComplete(props) {
+    console.log('On Auth Complete is firing')
     if(props.token){
-      this.props.navigation.navigate('map');
+      this.props.navigation.navigate('Map');
+    }
+  }
+
+  tryLoginProviders = async () => {
+    let fbToken = await AsyncStorage.getItem('fb_token');
+    if (fbToken){
+      this.props.facebookLogin(fbToken);
+      return; 
+    }
+    let googleToken = await AsyncStorage.getItem('google_token');
+    if (googleToken){
+      console.log('google login firing!')
+      this.props.googleLogin(googleToken);
+      return; 
     }
   }
 
   render() {
     return (
-      <View />
-      //when google login needed, create buttons for users to choose which login provider needed.
+      <View style = {{flex: 1, justifyContent: 'center'}}>
+        <SocialIcon
+          type = 'facebook'
+          title = 'Sign in with Facebook'
+          button
+          onPress = { () => this.props.facebookLogin() }
+        />
+        <SocialIcon
+          type = 'google-plus-official'
+          title = 'Sign in with Google'
+          button
+          onPress = { () => this.props.googleLogin() }
+        />
+      </View>
     );
   }
 }

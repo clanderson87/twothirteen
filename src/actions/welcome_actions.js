@@ -5,6 +5,9 @@ import { versionNumber } from '../CUSTOM_CONFIG';
 export const checkForUsage = () => async dispatch => {
   let hasUsed = await AsyncStorage.getItem(versionNumber);
   let token = await AsyncStorage.getItem('fb_token');
+  if (!token){
+    token = await AsyncStorage.getItem('google_token');
+  }
 
   console.log('checkForUsage()! hasUsed = ',hasUsed)
 

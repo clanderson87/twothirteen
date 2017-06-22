@@ -1,16 +1,22 @@
+//boilerplate state
 export const FACEBOOK_LOGIN_SUCCESS = 'facebook_login_success';
 export const FACEBOOK_LOGIN_FAIL = 'facebook_login_fail';
 export const HAS_USED = 'has_used';
 export const REGION_SET = 'region_set';
 export const ERROR = 'error';
-export const IMAGE_SELECTED = 'image_selected';
-export const IMAGE_CANCELLED = 'image_cancelled';
-export const TOGGLE_PICKER = 'toggle_picker';
-export const BAR_CODE_READ = 'bar_code_read';
 export const GOOGLE_LOGIN_FAIL = 'google_login_fail';
 export const GOOGLE_LOGIN_SUCCESS = 'google_login_success';
-export const RECORDING_ACTIVE = 'recording_active';
-export const RECORDING_PAUSED = 'recording_paused';
-export const SOUND_LOADED = 'sound_loaded';
-export const SOUND_PLAYING = 'sound_playing';
-export const NEAUTRALIZE_STATE = 'neautralize_state';
+
+//tip state
+export const RESTAURANTS_AQUIRED = 'restaurants_aquired';
+export const ADD_TIP_SUCCESS = 'add_tip_success';
+export const ADD_TIP_FAIL = 'add_tip_fail';
+export const DELETE_TIP = 'delete_tip';
+export const TIP_SELECTED = 'tip_selected';
+export const TIP_UNSELECTED = 'tip_unselect';
+export const EDIT_TIP = 'edit_tip';
+export const GET_INITIAL = 'get_initial';
+export const TIP_AMOUNT_CHANGED = 'tip_amount_changed';
+export const TIP_DATE_CHANGED = 'tip_date_changed';
+export const TIP_RESTAURANT_CHANGED = 'tip_restaurant_changed';
+export const TIP_SHIFT_CHANGED = 'tip_shift_changed';

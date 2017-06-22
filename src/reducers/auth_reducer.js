@@ -8,13 +8,13 @@ import {
 export default (state = {}, { type, payload }) => {
   switch(type){
     case FACEBOOK_LOGIN_SUCCESS:
-      return { token: payload };
+      return { ...state, token: payload };
     case FACEBOOK_LOGIN_FAIL:
-      return { token: null };
+      return { ...state, token: null };
     case GOOGLE_LOGIN_SUCCESS:
-      return { token: payload };
+      return { ...state, token: payload };
     case GOOGLE_LOGIN_FAIL:
-      return { token: null };
+      return { ...state, token: null };
     default: 
       return state;
   }
