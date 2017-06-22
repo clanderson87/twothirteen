@@ -50,10 +50,12 @@ const firebaseLogin = (token, dispatch, provider) => {
   if (provider === 'facebook'){
     credential = firebase.auth.FacebookAuthProvider.credential(token);
   } else if (provider === 'google'){
-    credential = firebase.auth.GoogleAuthProvider.credential(token);
+    credential = firebase.auth.GoogleAuthProvider.credential(null, token);
   };
 
   firebase.auth().signInWithCredential(credential).catch(error => {
+    console.log('there was a sign in error :( ', error)
+    error = handleFirebaseErrors(error);
     return dispatch({ type: ERROR, payload: error });
   });
 }
@@ -85,3 +87,34 @@ const doGoogleLogin = async dispatch => {
   await AsyncStorage.setItem('google_token', accessToken);
   return dispatch({ type: GOOGLE_LOGIN_SUCCESS, payload: accessToken });
 };
+
+const handleFirebaseErrors = error => {
+  switch(error.code){
+    case 'auth/app-deleted':
+      return { error, message: 'Try again later, we\'ve got some shenanigans to fix. Sorry :(' };
+    case 'auth/app-not-authorized':
+      return { error, message: 'Somebody screwed up a migration. Bear with us, we\'ve gotta get with google and unfuck some things :(' };
+    case 'auth/argument-error':
+      return { error, message: 'Chris borked something in the code. He\'s the worst. It might take us some time to fix it. Sorry :( ' };
+    case 'auth/invalid-api-key':
+      return { error, message: 'Oh god, this should NEVER happen. This shouldn\'t take too long to fix, but someone IS getting fired' };
+    case 'auth/invalid-user-token':
+      return { error, message: 'It\'s an old code, and it doesn\'t check out. Please Reauthenticate.' };
+    case 'auth/network-request-failed':
+      return { error, message: 'Are you in a tunnel? Are we in a tunnel? Somebody\'s in a tunnel, because the interweb is down :(' };
+    case 'auth/operation-not-allowed':
+      return { error, message: 'Nope. Try again with an acceptable provider' };
+    case 'auth/requires-recent-login':
+      return { error, message: 'Hold on... '}; //make sure to set up firebase.user.reauthenticateWithCredential
+    case 'auth/too-many-requests':
+      return { error, message: 'Easy there Russia, you\'re behaving a lot like a bot. Give it a rest and come back later' };
+    case 'auth/unauthorized-domain':
+      return { error, message: 'You\'re not supposed to be there' };
+    case 'auth/user-disabled':
+      return { error, message: 'Sorry pumpkin, you\'re no longer welcome at our party. Contact the devs if you think you\'ve reached this in error.' }
+    case 'auth/user-token-expired':
+      return { error, message: 'Please sign in again.' };
+    case 'auth/web-storage-unsupported':
+      return { error, message: 'Web storage unsupported. We\'re gonna need that, thanks.' };
+  }
+}

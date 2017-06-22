@@ -10,13 +10,14 @@ class AuthScreen extends Component {
     this.onAuthComplete(this.props);
   }
 
-  componentWillReceiveProps(nextProps){
-    this.onAuthComplete(nextProps); 
+  componentWillReceiveProps(nextProps){  
+    this.onAuthComplete(nextProps);
   }
 
   onAuthComplete(props) {
     console.log('On Auth Complete is firing')
-    if(props.token){
+    if(props.token && !props.error){
+      console.log('props are', props)
       this.props.navigation.navigate('Map');
     }
   }
@@ -50,13 +51,15 @@ class AuthScreen extends Component {
           button
           onPress = { () => this.props.googleLogin() }
         />
+        {this.props.error}
       </View>
     );
   }
 }
 
 const mapStateToProps = ({ auth }) => {
-  return { token: auth.token }
+  const { error, token } = auth;
+  return { error, token };
 }
 
 export default connect(mapStateToProps, { facebookLogin, googleLogin })(AuthScreen);

@@ -15,6 +15,12 @@ class MapScreen extends Component {
     this.props.setRegion(region);
   }
 
+  backToAuthScreenOnAuthError = () => {
+    if (this.props.error){
+      
+    }
+  }
+
   render() {
     if(this.props.region){
       return (
