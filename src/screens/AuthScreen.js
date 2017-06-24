@@ -1,24 +1,32 @@
 import React, { Component } from 'react';
-import { View, AsyncStorage } from 'react-native';
+import { View, AsyncStorage, Text } from 'react-native';
 import { SocialIcon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { facebookLogin, googleLogin } from '../actions';
 
 class AuthScreen extends Component {
   componentDidMount(){
-    this.tryLoginProviders();
-    this.onAuthComplete(this.props);
+    if (!this.props.error){
+      this.tryLoginProviders();
+      this.onAuthComplete(this.props);
+    }
   }
 
-  componentWillReceiveProps(nextProps){  
+  componentWillReceiveProps(nextProps){
     this.onAuthComplete(nextProps);
   }
 
   onAuthComplete(props) {
-    console.log('On Auth Complete is firing')
     if(props.token && !props.error){
-      console.log('props are', props)
       this.props.navigation.navigate('Map');
+    }
+  }
+
+  renderErrorMessage = () => {
+    if (this.props.error){
+      return (
+        <Text>{this.props.error.message}</Text>
+      )
     }
   }
 
@@ -30,7 +38,6 @@ class AuthScreen extends Component {
     }
     let googleToken = await AsyncStorage.getItem('google_token');
     if (googleToken){
-      console.log('google login firing!')
       this.props.googleLogin(googleToken);
       return; 
     }
@@ -39,6 +46,7 @@ class AuthScreen extends Component {
   render() {
     return (
       <View style = {{flex: 1, justifyContent: 'center'}}>
+        {this.renderErrorMessage()}
         <SocialIcon
           type = 'facebook'
           title = 'Sign in with Facebook'
@@ -51,7 +59,6 @@ class AuthScreen extends Component {
           button
           onPress = { () => this.props.googleLogin() }
         />
-        {this.props.error}
       </View>
     );
   }

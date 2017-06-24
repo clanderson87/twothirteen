@@ -7,18 +7,26 @@ import { getInitialRegion, setRegion } from '../actions';
 
 class MapScreen extends Component {
   componentDidMount(){
-    console.log('on map screen');
+    if(this.props.error){
+      this.backToAuthScreenOnAuthError()
+    };
     this.props.getInitialRegion();
+  }
+
+  componentWillReceiveProps(nextProps){
+    try {
+      if(nextProps.error.hasOwnProperty('type')){
+        if (nextProps.error.type === 'authError'){
+          this.props.navigation.navigate('auth')
+        }
+      }
+    } catch (e){
+      console.log(e);  
+    }
   }
 
   onRegionChangeComplete = (region) => {
     this.props.setRegion(region);
-  }
-
-  backToAuthScreenOnAuthError = () => {
-    if (this.props.error){
-      
-    }
   }
 
   render() {
