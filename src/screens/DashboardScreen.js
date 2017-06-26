@@ -8,14 +8,8 @@ import {
   getInitial,
   getRestaurants,
   addTip,
-  editTip,
-  deleteTip,
   selectTip,
   unselectTip,
-  tipAmountChanged,
-  tipDateChanged,
-  tipRestuarantChanged,
-  tipShiftChanged
 } from '../actions';
 import { addItemToUser } from '../actions/firebase_helpers';
 
