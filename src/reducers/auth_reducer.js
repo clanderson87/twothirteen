@@ -26,7 +26,7 @@ export default (state = {}, { type, payload }) => {
       return { ...state, token: null };
     case ERROR:
       console.log('in Auth Reducer, error is', payload);
-      return { ...state, token: null, error: payload }
+      return { ...state, token: null, error: payload, provider: null }
     default: 
       return state;
   }

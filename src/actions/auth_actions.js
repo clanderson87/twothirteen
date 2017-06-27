@@ -64,7 +64,7 @@ const firebaseLogin = (token, dispatch, provider) => {
       }
     )
     .catch(error => {
-      const _error = handleFirebaseErrors(error);
+      const _error = handleFirebaseErrors(error, provider);
       return dispatch({ type: ERROR, payload: _error });
     });
 }
@@ -73,7 +73,6 @@ export const googleLogin = (token = null) => async dispatch => {
   if(token === null){
     token = await AsyncStorage.getItem('google_token');
   };
-  console.log('in googleLogin, token is', token);
   if (token) {
     firebaseLogin(token, dispatch, 'google');
     return dispatch({ type: GOOGLE_LOGIN_SUCCESS, payload: token});
@@ -111,7 +110,7 @@ export const testForTokens = () => async dispatch => {
   return dispatch({ type: TOKEN_FOUND, payload: { token, provider } });
 };
 
-const handleFirebaseErrors = error => {
+const handleFirebaseErrors = async (error, provider) => {
   switch(error.code){
     case 'auth/app-deleted':
       return { error, type:'authError', message: 'Try again later, we\'ve got some shenanigans to fix. Sorry :(' };
@@ -140,6 +139,17 @@ const handleFirebaseErrors = error => {
     case 'auth/web-storage-unsupported':
       return { error, type:'authError', message: 'Web storage unsupported. We\'re gonna need that, thanks.' };
     case 'auth/account-exists-with-different-credential':
+      if(provider === 'facebook'){
+        console.log('duplicate facebook provider found')
+        await AsyncStorage.removeItem('fb_token');
+        let fb_token = await AsyncStorage.getItem('fb_token');
+        console.log('fb_token =', fb_token);
+      } else if(provider === 'google'){
+        console.log('duplicate google provider found')
+        await AsyncStorage.removeItem('google_token');
+        let google_token = await AsyncStorage.getItem('google_token');
+        console.log('google_token =', google_token);
+      }
       return { error, type:'authError', message: `We found your account, but you didn't sign in with that provider last time. Please sign in with the correct provider!`}
   }
 }
