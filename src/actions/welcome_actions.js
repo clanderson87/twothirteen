@@ -3,7 +3,7 @@ import { HAS_USED } from './types';
 import { versionNumber } from '../CUSTOM_CONFIG';
 
 export const checkForUsage = () => async dispatch => {
-  AsyncStorage.multiRemove([versionNumber, 'fb_token', 'google_token']) //=> for debugging purposes ONLY!
+  //AsyncStorage.multiRemove([versionNumber, 'fb_token', 'google_token']) //=> for debugging purposes ONLY!
 
   let hasUsed = await AsyncStorage.getItem(versionNumber);
   let token = await AsyncStorage.getItem('fb_token');
