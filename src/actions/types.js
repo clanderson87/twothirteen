@@ -6,6 +6,8 @@ export const REGION_SET = 'region_set';
 export const ERROR = 'error';
 export const GOOGLE_LOGIN_FAIL = 'google_login_fail';
 export const GOOGLE_LOGIN_SUCCESS = 'google_login_success';
+export const TOKEN_FOUND = 'token_found';
+export const FIREBASE_AUTHENTICATED = 'firebase_authenticated';
 
 //tip state
 export const RESTAURANTS_AQUIRED = 'restaurants_aquired';

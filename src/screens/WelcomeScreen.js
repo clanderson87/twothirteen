@@ -15,7 +15,8 @@ class WelcomeScreen extends Component {
   
   onSlidesComplete = () => {
     if(this.props.token){
-      this.props.navigation.navigate('Map');
+      console.log('token is', this.props.token);
+      this.props.navigation.navigate('auth');
     } else {
       this.props.navigation.navigate('auth');
     }
