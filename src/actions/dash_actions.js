@@ -11,7 +11,8 @@ import {
   TIP_SHIFT_CHANGED,
   TIP_AMOUNT_CHANGED,
   TIP_DATE_CHANGED,
-  TIP_RESTAURANT_CHANGED
+  TIP_RESTAURANT_CHANGED,
+  TIP_NOTES_CHANGED
 } from './types';
 import { dayOfWeek } from '../common/dateHelpers';
 
@@ -79,7 +80,7 @@ const generatePayload = (provided = null, message = null) => {
 //exported
 
 export const getRestaurants = () => {
-  const { currentUser } = firebase.auth()
+  const { currentUser } = firebase.auth();
 
   return (dispatch) => {
     firebase.database().ref(`users/${currentUser.uid}/restaurants`)
@@ -96,6 +97,7 @@ export const getRestaurants = () => {
 
 export const getInitial = () => {
   const { currentUser } = firebase.auth();
+  console.log('currentUser is ', currentUser);
   return (dispatch) => {
     firebase.database().ref('tips/')
       .orderByChild('uuid').limitToLast(10).equalTo(currentUser.uid)
@@ -217,6 +219,13 @@ export const editTip = (tip) => {
     });
   };
 };
+
+export const tipNotesChanged = notes => {
+  return {
+    type: TIP_NOTES_CHANGED,
+    payload: notes
+  }
+}
 
 export const tipShiftChanged = (shift) => {
   return {

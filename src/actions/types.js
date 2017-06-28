@@ -6,6 +6,9 @@ export const REGION_SET = 'region_set';
 export const ERROR = 'error';
 export const GOOGLE_LOGIN_FAIL = 'google_login_fail';
 export const GOOGLE_LOGIN_SUCCESS = 'google_login_success';
+export const TOKEN_FOUND = 'token_found';
+export const TOKEN_NOT_FOUND = 'token_not_found';
+export const FIREBASE_AUTHENTICATED = 'firebase_authenticated';
 
 //tip state
 export const RESTAURANTS_AQUIRED = 'restaurants_aquired';
@@ -20,3 +23,4 @@ export const TIP_AMOUNT_CHANGED = 'tip_amount_changed';
 export const TIP_DATE_CHANGED = 'tip_date_changed';
 export const TIP_RESTAURANT_CHANGED = 'tip_restaurant_changed';
 export const TIP_SHIFT_CHANGED = 'tip_shift_changed';
+export const TIP_NOTES_CHANGED = 'tip_notes_changed';

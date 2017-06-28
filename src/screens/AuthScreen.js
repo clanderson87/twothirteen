@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { View, AsyncStorage, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { SocialIcon } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { facebookLogin, googleLogin } from '../actions';
+import { facebookLogin, googleLogin, testForTokens } from '../actions';
 
 class AuthScreen extends Component {
   componentDidMount(){
-    if (!this.props.error){
-      this.tryLoginProviders();
+    if(!this.props.token && !this.props.error){
+      this.props.testForTokens();
       this.onAuthComplete(this.props);
     }
   }
@@ -17,7 +17,15 @@ class AuthScreen extends Component {
   }
 
   onAuthComplete(props) {
-    if(props.token && !props.error){
+    if (props.provider === 'facebook'){
+      props.facebookLogin(props.token);
+    }
+    
+    if (props.provider === 'google'){
+      props.googleLogin(props.token);
+    };
+
+    if(props.authenticated && !props.error){
       this.props.navigation.navigate('Map');
     }
   }
@@ -30,16 +38,26 @@ class AuthScreen extends Component {
     }
   }
 
-  tryLoginProviders = async () => {
-    let fbToken = await AsyncStorage.getItem('fb_token');
-    if (fbToken){
-      this.props.facebookLogin(fbToken);
-      return; 
-    }
-    let googleToken = await AsyncStorage.getItem('google_token');
-    if (googleToken){
-      this.props.googleLogin(googleToken);
-      return; 
+  renderButtonsOrNot(){
+    if(!this.props.loading){
+       return (
+        <View>
+          <SocialIcon
+            type = 'facebook'
+            title = 'Sign in with Facebook'
+            button
+            onPress = { () => this.props.facebookLogin() }
+          />
+          <SocialIcon
+            type = 'google-plus-official'
+            title = 'Sign in with Google'
+            button
+            onPress = { () => this.props.googleLogin() }
+          />
+        </View>
+      )
+    } else {
+      return <ActivityIndicator size = 'large' />
     }
   }
 
@@ -47,26 +65,15 @@ class AuthScreen extends Component {
     return (
       <View style = {{flex: 1, justifyContent: 'center'}}>
         {this.renderErrorMessage()}
-        <SocialIcon
-          type = 'facebook'
-          title = 'Sign in with Facebook'
-          button
-          onPress = { () => this.props.facebookLogin() }
-        />
-        <SocialIcon
-          type = 'google-plus-official'
-          title = 'Sign in with Google'
-          button
-          onPress = { () => this.props.googleLogin() }
-        />
+        {this.renderButtonsOrNot()}
       </View>
     );
   }
 }
 
 const mapStateToProps = ({ auth }) => {
-  const { error, token } = auth;
-  return { error, token };
+  const { error, token, authenticated, provider, loading } = auth;
+  return { error, token, authenticated, provider, loading };
 }
 
-export default connect(mapStateToProps, { facebookLogin, googleLogin })(AuthScreen);
+export default connect(mapStateToProps, { facebookLogin, googleLogin, testForTokens })(AuthScreen);

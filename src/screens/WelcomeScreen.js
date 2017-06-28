@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, AsyncStorage } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import Slides from '../components/Slides';
 import { welcomeSlides, readyButtonText, versionNumber } from '../CUSTOM_CONFIG';
@@ -15,25 +15,36 @@ class WelcomeScreen extends Component {
   
   onSlidesComplete = () => {
     if(this.props.token){
-      this.props.navigation.navigate('Map');
+      console.log('token is', this.props.token);
+      this.props.navigation.navigate('auth');
     } else {
       this.props.navigation.navigate('auth');
     }
   };
 
+  renderSlidesOrNot(){
+    if (this.props.loading){
+      return <ActivityIndicator size = 'large' />
+    } else {
+      <Slides 
+        data={welcomeSlides} 
+        buttonText = {readyButtonText}
+        onComplete = {this.onSlidesComplete} />
+    }
+  }
+
   render() {
     return (
-    <Slides 
-      data={welcomeSlides} 
-      buttonText = {readyButtonText}
-      onComplete = {this.onSlidesComplete} />
+    <View>
+      {this.renderSlidesOrNot()}
+    </View>
     )
   }
 };
 
 const mapStateToProps = ({ welcome }) => {
-  const { hasUsed, token } = welcome;
-  return { hasUsed, token }
+  const { hasUsed, token, loading } = welcome;
+  return { hasUsed, token, loading }
 }
 
 export default connect(mapStateToProps, {
