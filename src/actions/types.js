@@ -7,6 +7,7 @@ export const ERROR = 'error';
 export const GOOGLE_LOGIN_FAIL = 'google_login_fail';
 export const GOOGLE_LOGIN_SUCCESS = 'google_login_success';
 export const TOKEN_FOUND = 'token_found';
+export const TOKEN_NOT_FOUND = 'token_not_found';
 export const FIREBASE_AUTHENTICATED = 'firebase_authenticated';
 
 //tip state
