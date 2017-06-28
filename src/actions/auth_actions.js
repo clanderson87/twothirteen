@@ -48,11 +48,14 @@ const doFacebookLogin = async dispatch => {
 };
 
 const firebaseLogin = (token, dispatch, provider) => {
+  console.log('firebase login being called!');
   let credential = new String();
   if (provider === 'facebook'){
     credential = firebase.auth.FacebookAuthProvider.credential(token);
   } else if (provider === 'google'){
+    console.log('provider is', provider);
     credential = firebase.auth.GoogleAuthProvider.credential(null, token);
+    console.log('credential is', credential);
   };
 
   firebase.auth().signInWithCredential(credential)
@@ -75,6 +78,7 @@ export const googleLogin = (token = null) => async dispatch => {
   };
   if (token) {
     firebaseLogin(token, dispatch, 'google');
+    console.log('from googleLogin');
     return dispatch({ type: GOOGLE_LOGIN_SUCCESS, payload: token});
   } else {
     doGoogleLogin(dispatch);
@@ -94,6 +98,7 @@ const doGoogleLogin = async dispatch => {
 
   firebaseLogin(accessToken, dispatch, 'google');
   await AsyncStorage.setItem('google_token', accessToken);
+  console.log('from doGoogleLogin')
   return dispatch({ type: GOOGLE_LOGIN_SUCCESS, payload: accessToken });
 };
 
@@ -111,6 +116,7 @@ export const testForTokens = () => async dispatch => {
 };
 
 const handleFirebaseErrors = async (error, provider) => {
+  console.log('error is ', error);
   switch(error.code){
     case 'auth/app-deleted':
       return { error, type:'authError', message: 'Try again later, we\'ve got some shenanigans to fix. Sorry :(' };
@@ -151,5 +157,7 @@ const handleFirebaseErrors = async (error, provider) => {
         console.log('google_token =', google_token);
       }
       return { error, type:'authError', message: `We found your account, but you didn't sign in with that provider last time. Please sign in with the correct provider!`}
+    case 'auth/internal-error':
+      return {error, type: 'authError', message: 'Something weird happened on our end. Please try to sign in again and we\'ll try to not suck so much :('}
   }
 }
