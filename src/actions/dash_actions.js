@@ -97,7 +97,6 @@ export const getRestaurants = () => {
 
 export const getInitial = () => {
   const { currentUser } = firebase.auth();
-  console.log('currentUser is ', currentUser);
   return (dispatch) => {
     firebase.database().ref('tips/')
       .orderByChild('uuid').limitToLast(10).equalTo(currentUser.uid)

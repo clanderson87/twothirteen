@@ -17,14 +17,16 @@ class AddScreen extends Component {
   componentWillMount(){}
 
   render(){
-    <View>
-      <FormLabel>Amount</FormLabel>
-      <FormInput 
-        onChangeText = {(text) => this.props.tipAmountChanged()} 
-        keyboardType = 'numeric'
-      />
-      <FormLabel</FormLabel>
-    </View>
+    return (
+      <View>
+        <FormLabel>Amount</FormLabel>
+        <FormInput 
+          onChangeText = {(text) => this.props.tipAmountChanged()} 
+          keyboardType = 'numeric'
+        />
+        <FormLabel></FormLabel>
+      </View>
+    )
   }
 
   componentDidMount(){}

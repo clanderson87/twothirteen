@@ -32,19 +32,25 @@ export const buttonStyle = {
   marginTop: 15
 }
 
-/* ****************** for use with CameraScreen.js > .js ******************* */
+/* ******************** for use with DashboardScreen.js ******************** */
 
-export const imageViewStyle = (height) => {
-  return {
-    height,
-    width: SCREEN_WIDTH//,
-    //flex: 5
-  }
+export const FABstyle = {
+
 }
 
-/* ****************** for use with BarCodeScannerScreen.js > .js ******************* */
+// /* ****************** for use with CameraScreen.js > .js ******************* */
 
-export const BarCodeScannerStyle = {
-  height: 200,
-  width: 200
-};
+// export const imageViewStyle = (height) => {
+//   return {
+//     height,
+//     width: SCREEN_WIDTH//,
+//     //flex: 5
+//   }
+// }
+
+// /* ****************** for use with BarCodeScannerScreen.js > .js ******************* */
+
+// export const BarCodeScannerStyle = {
+//   height: 200,
+//   width: 200
+// };

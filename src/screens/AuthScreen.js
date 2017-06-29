@@ -26,7 +26,7 @@ class AuthScreen extends Component {
     };
 
     if(props.authenticated && !props.error){
-      this.props.navigation.navigate('Map');
+      this.props.navigation.navigate('Dashboard');
     }
   }
 

@@ -1,6 +1,7 @@
 import { TabNavigator, TabBarTop } from 'react-navigation'; //IF NOT react-navigation 1.0-beta9, omit 'TabBarTop'
 import AuthScreen from '../screens/AuthScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
+import AddScreen from '../screens/AddScreen';
 import MainFlowTabNavigator from './MainFlowTabNavigator';
 import { OS } from '../styles';
 
@@ -22,7 +23,8 @@ if(OS === 'android'){
 const OnInitialLoadOrSignoutNavigator = TabNavigator({
 	welcome: { screen: WelcomeScreen },
 	auth: { screen: AuthScreen },
-	main: { screen: MainFlowTabNavigator }
+	main: { screen: MainFlowTabNavigator },
+  AddTip: { screen: AddScreen }
 }, secondaryNavOptions);
 
 export default OnInitialLoadOrSignoutNavigator;
