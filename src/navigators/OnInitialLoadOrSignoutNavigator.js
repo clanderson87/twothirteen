@@ -24,7 +24,6 @@ const OnInitialLoadOrSignoutNavigator = TabNavigator({
 	welcome: { screen: WelcomeScreen },
 	auth: { screen: AuthScreen },
 	main: { screen: MainFlowTabNavigator },
-  AddTip: { screen: AddScreen }
 }, secondaryNavOptions);
 
 export default OnInitialLoadOrSignoutNavigator;

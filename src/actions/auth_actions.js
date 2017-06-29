@@ -69,6 +69,7 @@ const firebaseLogin = (token, dispatch, provider) => {
     )
     .catch(error => {
       const _error = handleFirebaseErrors(error, provider);
+      console.log('_error passed to redux is:', _error);
       return dispatch({ type: ERROR, payload: _error });
     });
 }
@@ -125,7 +126,8 @@ const deleteTokens = async () => {
 }
 
 const handleFirebaseErrors = async (error, provider) => {
-  console.log('error is ', error);
+  console.log('In HFE, Error is', error);
+  console.log('in HFE, Error.code is', error.code);
   switch(error.code){
     case 'auth/app-deleted':
       return { error, type:'authError', message: 'Try again later, we\'ve got some shenanigans to fix. Sorry :(' };

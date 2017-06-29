@@ -1,10 +1,12 @@
 import { StackNavigator } from 'react-navigation';
+import AddOrEditNavigator from './AddOrEditNavigator';
 import DashboardScreen from '../screens/DashboardScreen';
-import SettingsScreen from '../screens/SettingsScreen'; 
+import SettingsScreen from '../screens/SettingsScreen';
 
 const SubFlowStackNavigator = StackNavigator({
   Dashboard: { screen: DashboardScreen },
-  Settings: { screen: SettingsScreen }
+  Detail: { screen: SettingsScreen },
+  AddTip: { screen: AddOrEditNavigator }
 });
 
 export default SubFlowStackNavigator;

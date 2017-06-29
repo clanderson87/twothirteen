@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
-import { FormLabel, FormInput, Grid, Row, Col } from 'react-native-elements';
+import { View, Picker } from 'react-native';
+import { FormLabel, FormInput, CheckBox } from 'react-native-elements';
 import {
   tipAmountChanged,
   tipDateChanged,
@@ -24,7 +24,18 @@ class AddScreen extends Component {
           onChangeText = {(text) => this.props.tipAmountChanged()} 
           keyboardType = 'numeric'
         />
-        <FormLabel></FormLabel>
+        <FormLabel>Place</FormLabel>
+        <Picker
+          selectedValue = { this.props.tipShift }
+          onValueChange = {(shift) => this.props.tipShiftChanged(shift)}
+        >
+          <Picker.Item label = 'Breakfast' value = 'breakfast' />
+          <Picker.Item label = 'Brunch' value = 'brunch' />
+          <Picker.Item label = 'Lunch' value = 'lunch' />
+          <Picker.Item label = 'Happy Hour' value = 'happy hour' />
+          <Picker.Item label = 'Dinner' value = 'dinner' />
+          <Picker.Item label = 'Late Night' value = 'late night' />
+        </Picker>
       </View>
     )
   }
