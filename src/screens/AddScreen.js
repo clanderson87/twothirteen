@@ -16,9 +16,32 @@ class AddScreen extends Component {
   
   componentWillMount(){}
 
+
+  renderAddFormStepByStep = () => {
+    switch(this.props.step) {
+      case 'amount needed':
+        return (
+          <View>
+            <FormLabel>Amount</FormLabel>
+            <FormInput 
+              onChangeText = {(text) => this.props.tipAmountChanged()} 
+              keyboardType = 'numeric'
+            />
+          </View>
+        );
+      case 'date needed':
+        return (
+          <View>
+            {/*Calendar Solution */}
+          </View>
+        )
+    }
+  }
+
+
   render(){
     return (
-      <View>
+      <View style = {{ flex: 1, justifyContent: 'center'}} >
         <FormLabel>Amount</FormLabel>
         <FormInput 
           onChangeText = {(text) => this.props.tipAmountChanged()} 

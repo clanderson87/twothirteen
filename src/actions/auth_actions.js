@@ -168,6 +168,6 @@ const handleFirebaseErrors = async (error, provider) => {
       return { error, type:'authError', message: `We found your account, but you didn't sign in with that provider last time. Please sign in with the correct provider!`}
     case 'auth/internal-error':
       await deleteTokens();
-      return { ...error, type: 'authError', message: 'Something weird happened on our end. Please try to sign in again and we\'ll try to not suck so much :('}
+      return { type: 'authError', message: 'Something weird happened on our end. Please try to sign in again and we\'ll try to not suck so much :('}
   }
 }
