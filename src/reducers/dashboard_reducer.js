@@ -9,7 +9,10 @@ import {
   TIP_SHIFT_CHANGED,
   TIP_RESTAURANT_CHANGED,
   TIP_DATE_CHANGED,
-  TIP_AMOUNT_CHANGED
+  TIP_AMOUNT_CHANGED,
+  TIP_NOTES_CHANGED,
+  TIP_RATING_CHANGED,
+  STEP_CHANGED
 } from '../actions/types';
 const INITIAL_STATE = { 
   usersTips: [],
@@ -21,6 +24,9 @@ const INITIAL_STATE = {
   tipDate: new Date(),
   tipShift: "Lunch",
   tipRestaurant: '', //NB: once RESTAURANTS_AQUIRED fires, tipRestaurant shouldn't be defaulted back to null
+  tipNotes: '',
+  tipRating: 3,
+  step: 'amount needed',
   selectedTip: null
 };
 
@@ -63,6 +69,10 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, tipDate: payload };
     case TIP_AMOUNT_CHANGED:
       return { ...state, tipAmount: payload.amount, message: payload.message };
+    case TIP_NOTES_CHANGED:
+      return { ...state, tipNotes: payload };
+    case TIP_RATING_CHANGED:
+      return { ...state, tipRating: payload };
     default:
       return state;
   }

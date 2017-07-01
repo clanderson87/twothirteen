@@ -12,7 +12,9 @@ import {
   TIP_AMOUNT_CHANGED,
   TIP_DATE_CHANGED,
   TIP_RESTAURANT_CHANGED,
-  TIP_NOTES_CHANGED
+  TIP_NOTES_CHANGED,
+  TIP_RATING_CHANGED,
+  STEP_CHANGED
 } from './types';
 import { dayOfWeek } from '../common/dateHelpers';
 
@@ -111,7 +113,7 @@ export const getInitial = () => {
   };
 };
 
-export const addTip = (amount, date, restaurant, shift) => {
+export const addTip = ({amount, date, restaurant, shift, notes, rating}) => {
   const tipRef = firebase.database().ref('tips').push();
   tip = {
     restaurant,
@@ -226,12 +228,26 @@ export const tipNotesChanged = notes => {
   }
 }
 
+export const tipRatingChanged = rating => {
+  return {
+    type: TIP_RATING_CHANGED,
+    payload: rating
+  }
+}
+
 export const tipShiftChanged = (shift) => {
   return {
     type: TIP_SHIFT_CHANGED,
     payload: shift
   };
 };
+
+export const stepChanged = step => {
+  return {
+    type: STEP_CHANGED,
+    payload: step
+  }
+}
 
 export const tipAmountChanged = (amount) => {
   let acceptable='0123456789.$'
