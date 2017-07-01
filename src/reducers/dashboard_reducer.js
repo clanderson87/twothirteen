@@ -73,6 +73,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, tipNotes: payload };
     case TIP_RATING_CHANGED:
       return { ...state, tipRating: payload };
+    case STEP_CHANGED:
+      return { ...state, step: payload };
     default:
       return state;
   }
