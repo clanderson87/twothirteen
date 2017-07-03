@@ -5,16 +5,21 @@ import {
   Picker, 
   FlatList, 
   TouchableOpacity, 
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  Text
 } from 'react-native';
 import { 
   FormLabel, 
   FormInput, 
   CheckBox, 
   Card,
-  Rating
+  Button,
+  Divider,
+  Rating,
+  Grid,
+  Row
 } from 'react-native-elements';
-//import { Calendar } from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 import { OS } from '../styles'
 import {
   tipAmountChanged,
@@ -33,15 +38,30 @@ class AddScreen extends Component {
   
   componentWillMount(){}
 
-  renderRestaurantCard = rest => {
-    <Card
-      image = {restaurant.imageUrl}
-      title = {restaurant.name}
-    >
-      <Text style = {{ marginBottom: 10 }}>
-        {restaurant.address}
-      </Text>
-    </Card>
+  renderRestaurantCard = restaurant => {
+    console.log('in rRC, restaurant is:', restaurant);
+    return (
+      <Card
+        image = {restaurant.imageUrl}
+        title = {restaurant.name}
+      >
+        <Text style = {{ marginBottom: 10 }}>
+          {restaurant.address}
+        </Text>
+      </Card>
+    );
+  };
+
+  returnMarkedDates = () => {
+    if(this.props.tipDate.dateString){
+      let marked = {}
+      marked[this.props.tipDate.dateString] = { selected : true }
+      console.log(marked);
+      return marked;
+    }
+    else {
+      return {};
+    }
   }
 
   renderAddFormStepByStep = () => {
@@ -59,31 +79,67 @@ class AddScreen extends Component {
         );
       case 'restaurant needed':
         return (
-          <FlatList
-            horizontal
-            data = {this.props.usersRestaurants}
-            renderItem = {({restaurant}) => {
-              OS === 'ios' ?
-              <TouchableOpacity
-                onPress = {(restaurant) => {this.props.tipRestuarantChanged, this.props.stepChanged('date needed')}}>
-                {this.renderRestaurantCard(restaurant)}
-              </TouchableOpacity>
-              :
-              <TouchableNativeFeedback
-                onPress = {(restaurant) => {this.props.tipRestuarantChanged, this.props.stepChanged('date needed')}}>
-                {this.renderRestaurantCard(restaurant)}
-              </TouchableNativeFeedback>
-            }}
-          />
+          <View>
+            <FlatList
+              horizontal
+              data = {this.props.usersRestaurants}
+              keyExtractor = { item => item.gId }
+              renderItem = {({item}) => {
+                console.log('in flatlist, item is:', item);
+                return (
+                OS === 'ios' ?
+                <TouchableOpacity
+                  onPress = {() => {this.props.tipRestuarantChanged(item), this.props.stepChanged('date needed')}}>
+                  {this.renderRestaurantCard(item)}
+                </TouchableOpacity>
+                :
+                <TouchableNativeFeedback
+                  onPress = {() => {this.props.tipRestuarantChanged(item), this.props.stepChanged('date needed')}}>
+                  {this.renderRestaurantCard(item)}
+                </TouchableNativeFeedback>
+                )
+              }}
+            />
+          </View>
         );
       case 'date needed':
         return (
-          <View>
-            {/*<Calendar 
-              onDayPress = {(day) => this.props.tipDateChanged(day)}
-            />*/}
-            <Button onPress = {() => this.props.stepChanged('shift needed')} title = { 'Next' } />
-          </View>
+          <Grid style = {{ flex: 1 }}>
+            <Row size = {1} />
+            <Row size = {3}>
+              <Calendar 
+                hideExtraDays
+                onDayPress = {(day) => this.props.tipDateChanged(day)}
+                firstDay = {1}
+                markedDates = {this.returnMarkedDates()}
+                style={{
+                  height: 350,
+                  flex: 7
+                }}
+                theme = {{
+                  calendarBackground: '#ffffff',
+                  textSectionTitleColor: '#b6c1cd',
+                  selectedDayBackgroundColor: '#dddddd',
+                  selectedDayTextColor: '#ffffff',
+                  todayTextColor: '#00adf5',
+                  dayTextColor: '#2d4150',
+                  textDisabledColor: '#d9e1e8',
+                  dotColor: '#00adf5',
+                  selectedDotColor: '#abcdef',
+                  arrowColor: 'orange',
+                  monthTextColor: 'blue'
+                }}
+              />
+            </Row>
+            <Row size = {1}>
+              {this.props.tipDate.dateString ? 
+                <Button 
+                onPress = {() => this.props.stepChanged('shift needed')} 
+                title = { 'Next' } 
+                />
+              : null }
+            </Row> 
+          </Grid>
         );
       case 'shift needed':
         return (
@@ -109,7 +165,6 @@ class AddScreen extends Component {
         return (
           <View>
             <FormLabel>How was the shift?</FormLabel>
-            <Text>{this.props.tipRating}</Text>
             <Rating
               showRating
               type="star"
@@ -142,7 +197,7 @@ class AddScreen extends Component {
 
   render(){
     return (
-      <View style = {{ flex: 1, justifyContent: 'center'}} >
+      <View style = {{ flex: 1, justifyContent: 'center' }} >
         {this.renderAddFormStepByStep()}
       </View>
     )

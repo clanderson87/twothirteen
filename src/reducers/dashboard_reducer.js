@@ -14,11 +14,25 @@ import {
   TIP_RATING_CHANGED,
   STEP_CHANGED
 } from '../actions/types';
+
+const DUMMY_RESTAURANTS = [{
+  name: 'FAKE GRILL',
+  gId: 'FAKE GID',
+  imageUrl: 'http://placekitten.com/200/300',
+  address: '1111 FAKE ST'
+},
+{
+  name: 'BARLIES',
+  gId: 'NOPE',
+  imageUrl: 'http://placekitten.com/300/420',
+  address: '12345 BUTT LANE'
+}]
+
 const INITIAL_STATE = { 
   usersTips: [],
   usersAverage: null,
   usersProjected: null,
-  usersRestaurants: [],
+  usersRestaurants: DUMMY_RESTAURANTS,
   message: '',
   tipAmount: null,
   tipDate: new Date(),

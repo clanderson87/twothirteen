@@ -267,12 +267,12 @@ export const tipAmountChanged = (amount) => {
 };
 
 export const tipDateChanged = (date) => {
-  const splitDate = date.split('/');
-  const d = new Date(splitDate[0], (splitDate [1] - 1), splitDate[2]);
+  // const splitDate = date.split('/');
+  // const d = new Date(splitDate[0], (splitDate [1] - 1), splitDate[2]);
 
   return {
     type: TIP_DATE_CHANGED,
-    payload: d
+    payload: date
   };
 };
 
