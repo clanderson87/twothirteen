@@ -35,7 +35,7 @@ const INITIAL_STATE = {
   usersRestaurants: DUMMY_RESTAURANTS,
   message: '',
   tipAmount: null,
-  tipDate: new Date(),
+  tipDate: null,
   tipShift: "Lunch",
   tipRestaurant: '', //NB: once RESTAURANTS_AQUIRED fires, tipRestaurant shouldn't be defaulted back to null
   tipNotes: '',
@@ -82,6 +82,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case TIP_RESTAURANT_CHANGED:
       return { ...state, tipRestaurant: payload };
     case TIP_DATE_CHANGED:
+      console.log('Date changed!', payload, typeof(payload));
       return { ...state, tipDate: payload };
     case TIP_AMOUNT_CHANGED:
       return { ...state, tipAmount: payload.amount, message: payload.message };

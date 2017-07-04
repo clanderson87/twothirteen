@@ -43,7 +43,7 @@ const sanitizeShift = (shift) => {
   }
 }
 
-const sanitizeDate = (date, shift) => {
+const sanitizeDate = (date) => {
   if(typeof(date) !== 'string'){
     date = (new Date(date).toLocaleDateString());
   };
@@ -118,25 +118,26 @@ export const getInitial = () => {
 
 export const addTip = ({amount, date, restaurant, shift, notes, rating}) => {
   const tipRef = firebase.database().ref('tips').push();
-  const protoDate = new Date();
-  const offset = protoDate.getTimezoneOffset() * 60000;
-  const tipDate = new Date(date.timestamp + offset + sanitizeShift(shift));
+  console.log('shift is:', shift, 'date is:', date);
+  let hours = (((shift - date) / 60000) / 60).toFixed(2);
+  console.log('hours is ', hours)
+  amount = parseInt(amount)
   let tip = {
-    restaurant,
-    shift,
-    amount: parseInt(amount),
-    date: tipDate.getUTCMilliseconds(),
+    restaurant: restaurant.gId,
+    shift: shift.getTime(),
+    hours,
+    amount,
+    date: date.getTime(),
     uuid: firebase.auth().currentUser.uid,
     tId: tipRef.key,
-    added: protoDate.getTime(),
-    weekday: dayOfWeek(tipDate.getDay())
+    added: new Date().getTime(),
+    weekday: dayOfWeek(date.getDay()),
+    perHour: (amount / hours).toFixed(2)
     //methods to add server side:
       //weather
       //events
       //cuisene type
   };
-  
-  console.log('in add tip, tip is', tip);
   return (dispatch) => {
     const successAddAction = (tip) => {
       dispatch({
