@@ -117,7 +117,6 @@ class AddScreen extends Component {
                   flex: 7
                 }}
                 theme = {{
-                  calendarBackground: '#ffffff',
                   textSectionTitleColor: '#b6c1cd',
                   selectedDayBackgroundColor: '#dddddd',
                   selectedDayTextColor: '#ffffff',

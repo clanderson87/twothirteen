@@ -24,19 +24,20 @@ const getUsersProjected = (provided) => {
 }
 
 const sanitizeShift = (shift) => {
+  let hour = 3600000;
   switch(shift){
     case 'Breakfast':
-      return '07:30:00';
+      return hour * 7.5;
     case 'Brunch':
-      return '10:15:00';
+      return hour * 10.25;
     case 'Lunch':
-      return '12:00:00';
+      return hour * 12;
     case 'Happy Hour':
-      return '15:30:00';
+      return hour * 15.5;
     case 'Dinner':
-      return '18:30:00';
+      return hour * 16;
     case 'Late Night':
-      return '22:30:00';
+      return hour * 23;
   }
 }
 
@@ -115,15 +116,18 @@ export const getInitial = () => {
 
 export const addTip = ({amount, date, restaurant, shift, notes, rating}) => {
   const tipRef = firebase.database().ref('tips').push();
-  tip = {
+  const protoDate = new Date();
+  const offset = protoDate.getTimezoneOffset() * 60000;
+  const tipDate = date.timestamp + offset + sanitizeShift(shift);
+  let tip = {
     restaurant,
     shift,
     amount: parseInt(amount),
-    date: sanitizeDate(date, shift),
+    date: tipDate,
     uuid: firebase.auth().currentUser.uid,
     tId: tipRef.key,
-    added: new Date().getTime(),
-    weekday: dayOfWeek(date.getDay())
+    added: protoDate.getTime(),
+    weekday: dayOfWeek(new Date(tipDate).getDay())
     //methods to add server side:
       //weather
       //events
