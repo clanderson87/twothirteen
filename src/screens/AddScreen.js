@@ -38,6 +38,13 @@ class AddScreen extends Component {
   
   componentWillMount(){}
 
+  componentWillReceiveProps(nextProps){
+    console.log('nav is ', nextProps);
+    if(nextProps.navigateTo){
+      this.props.navigation.navigate(nextProps.navigateTo);
+    }
+  }
+
   renderRestaurantCard = restaurant => {
     console.log('in rRC, restaurant is:', restaurant);
     return (
@@ -74,7 +81,13 @@ class AddScreen extends Component {
               onChangeText = {(tip) => this.props.tipAmountChanged(tip)} 
               keyboardType = 'numeric'
               onEndEditing = {() => this.props.stepChanged('restaurant needed')}
+              value = {this.props.tipAmount}
             />
+            {
+              this.props.message ? 
+              <Text>{this.props.message}</Text> :
+              null
+            }
           </View>
         );
       case 'restaurant needed':
@@ -85,7 +98,6 @@ class AddScreen extends Component {
               data = {this.props.usersRestaurants}
               keyExtractor = { item => item.gId }
               renderItem = {({item}) => {
-                console.log('in flatlist, item is:', item);
                 return (
                 OS === 'ios' ?
                 <TouchableOpacity
@@ -215,7 +227,9 @@ const mapStateToProps = ({ dashboard }) => {
     tipRating,
     selectedTip,
     step,
-    usersRestaurants
+    usersRestaurants,
+    navigateTo,
+    message
    } = dashboard;
 
   return {
@@ -227,7 +241,9 @@ const mapStateToProps = ({ dashboard }) => {
     tipRating,
     selectedTip,
     step,
-    usersRestaurants
+    usersRestaurants,
+    navigateTo,
+    message
   }
 }
 

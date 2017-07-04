@@ -54,12 +54,10 @@ class DashboardScreen extends Component {
 
   generateAddFAB = () => {
     let topFabOffset = Math.round(Dimensions.get('window').height * 0.7);
-    console.log(topFabOffset);
     let leftFabOffset = Math.round(Dimensions.get('window').width * 0.75);
-    console.log(leftFabOffset);
     return (
       <Avatar
-          large
+          medium
           rounded
           onPress = {() => this.goToAddTip()}
           icon = {{ name: 'add' }}
