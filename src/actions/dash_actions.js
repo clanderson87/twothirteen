@@ -23,32 +23,32 @@ const getUsersProjected = (provided) => {
   //fill this in later...
 }
 
-const sanitizeShift = (shift) => {
-  let hour = 3600000;
-  switch(shift){
-    case 'Breakfast':
-      return hour * 7.5;
-    case 'Brunch':
-      return hour * 10.25;
-    case 'Lunch':
-      return hour * 12;
-    case 'Happy Hour':
-      return hour * 15.5;
-    case 'Dinner':
-      return hour * 16;
-    case 'Late Night':
-      return hour * 23;
-    default:
-      return hour * 12;
-  }
-}
+// const sanitizeShift = (shift) => {
+//   let hour = 3600000;
+//   switch(shift){
+//     case 'Breakfast':
+//       return hour * 7.5;
+//     case 'Brunch':
+//       return hour * 10.25;
+//     case 'Lunch':
+//       return hour * 12;
+//     case 'Happy Hour':
+//       return hour * 15.5;
+//     case 'Dinner':
+//       return hour * 16;
+//     case 'Late Night':
+//       return hour * 23;
+//     default:
+//       return hour * 12;
+//   }
+// }
 
-const sanitizeDate = (date) => {
-  if(typeof(date) !== 'string'){
-    date = (new Date(date).toLocaleDateString());
-  };
-  return (new Date(`${date} `+`${sanitizeShift(shift)}`).getTime());
-}
+// const sanitizeDate = (date) => {
+//   if(typeof(date) !== 'string'){
+//     date = (new Date(date).toLocaleDateString());
+//   };
+//   return (new Date(`${date} `+`${sanitizeShift(shift)}`).getTime());
+// }
 
 
 const generatePayload = (provided = null, message = null) => {
