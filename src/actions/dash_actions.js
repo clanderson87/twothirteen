@@ -38,6 +38,8 @@ const sanitizeShift = (shift) => {
       return hour * 16;
     case 'Late Night':
       return hour * 23;
+    default:
+      return hour * 12;
   }
 }
 
@@ -118,22 +120,23 @@ export const addTip = ({amount, date, restaurant, shift, notes, rating}) => {
   const tipRef = firebase.database().ref('tips').push();
   const protoDate = new Date();
   const offset = protoDate.getTimezoneOffset() * 60000;
-  const tipDate = date.timestamp + offset + sanitizeShift(shift);
+  const tipDate = new Date(date.timestamp + offset + sanitizeShift(shift));
   let tip = {
     restaurant,
     shift,
     amount: parseInt(amount),
-    date: tipDate,
+    date: tipDate.getUTCMilliseconds(),
     uuid: firebase.auth().currentUser.uid,
     tId: tipRef.key,
     added: protoDate.getTime(),
-    weekday: dayOfWeek(new Date(tipDate).getDay())
+    weekday: dayOfWeek(tipDate.getDay())
     //methods to add server side:
       //weather
       //events
       //cuisene type
   };
-
+  
+  console.log('in add tip, tip is', tip);
   return (dispatch) => {
     const successAddAction = (tip) => {
       dispatch({

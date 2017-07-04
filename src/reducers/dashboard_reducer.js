@@ -54,7 +54,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, 
         message: payload.message,
         tipAmount: null,
-        navigateTo: 'Dashboard'
+        navigateTo: 'Subflow',
+        step: 'amount needed'
       };
     case ADD_TIP_FAIL:
       return { ...state, message: payload.message };

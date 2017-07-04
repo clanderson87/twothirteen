@@ -39,7 +39,6 @@ class AddScreen extends Component {
   componentWillMount(){}
 
   componentWillReceiveProps(nextProps){
-    console.log('nav is ', nextProps);
     if(nextProps.navigateTo){
       this.props.navigation.navigate(nextProps.navigateTo);
     }
@@ -155,7 +154,7 @@ class AddScreen extends Component {
       case 'shift needed':
         return (
           <View>
-            <FormLabel>Place</FormLabel>
+            <FormLabel>Shift</FormLabel>
             <Picker
               selectedValue = { this.props.tipShift }
               onValueChange = {(shift) => this.props.tipShiftChanged(shift)}
@@ -165,7 +164,7 @@ class AddScreen extends Component {
               <Picker.Item label = 'Lunch' value = 'Lunch' />
               <Picker.Item label = 'Happy Hour' value = 'Happy Hour' />
               <Picker.Item label = 'Dinner' value = 'Dinner' />
-              <Picker.Item label = 'Late Night' value = 'Late night' />
+              <Picker.Item label = 'Late Night' value = 'Late Night' />
             </Picker>
             <Button 
               onPress = {() => this.props.stepChanged('other needed')}

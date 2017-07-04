@@ -7,9 +7,6 @@ import { getInitialRegion, setRegion } from '../actions';
 
 class MapScreen extends Component {
   componentDidMount(){
-    if(this.props.error){
-      this.backToAuthScreenOnAuthError()
-    };
     this.props.getInitialRegion();
   }
 
