@@ -12,7 +12,9 @@ import {
   TIP_AMOUNT_CHANGED,
   TIP_DATE_CHANGED,
   TIP_RESTAURANT_CHANGED,
-  TIP_NOTES_CHANGED
+  TIP_NOTES_CHANGED,
+  TIP_RATING_CHANGED,
+  STEP_CHANGED
 } from './types';
 import { dayOfWeek } from '../common/dateHelpers';
 
@@ -22,19 +24,22 @@ const getUsersProjected = (provided) => {
 }
 
 const sanitizeShift = (shift) => {
+  let hour = 3600000;
   switch(shift){
     case 'Breakfast':
-      return '07:30:00';
+      return hour * 7.5;
     case 'Brunch':
-      return '10:15:00';
+      return hour * 10.25;
     case 'Lunch':
-      return '12:00:00';
+      return hour * 12;
     case 'Happy Hour':
-      return '15:30:00';
+      return hour * 15.5;
     case 'Dinner':
-      return '18:30:00';
+      return hour * 16;
     case 'Late Night':
-      return '22:30:00';
+      return hour * 23;
+    default:
+      return hour * 12;
   }
 }
 
@@ -97,7 +102,6 @@ export const getRestaurants = () => {
 
 export const getInitial = () => {
   const { currentUser } = firebase.auth();
-  console.log('currentUser is ', currentUser);
   return (dispatch) => {
     firebase.database().ref('tips/')
       .orderByChild('uuid').limitToLast(10).equalTo(currentUser.uid)
@@ -112,23 +116,27 @@ export const getInitial = () => {
   };
 };
 
-export const addTip = (amount, date, restaurant, shift) => {
+export const addTip = ({amount, date, restaurant, shift, notes, rating}) => {
   const tipRef = firebase.database().ref('tips').push();
-  tip = {
+  const protoDate = new Date();
+  const offset = protoDate.getTimezoneOffset() * 60000;
+  const tipDate = new Date(date.timestamp + offset + sanitizeShift(shift));
+  let tip = {
     restaurant,
     shift,
     amount: parseInt(amount),
-    date: sanitizeDate(date, shift),
+    date: tipDate.getUTCMilliseconds(),
     uuid: firebase.auth().currentUser.uid,
     tId: tipRef.key,
-    added: new Date().getTime(),
-    weekday: dayOfWeek(date.getDay())
+    added: protoDate.getTime(),
+    weekday: dayOfWeek(tipDate.getDay())
     //methods to add server side:
       //weather
       //events
       //cuisene type
   };
-
+  
+  console.log('in add tip, tip is', tip);
   return (dispatch) => {
     const successAddAction = (tip) => {
       dispatch({
@@ -227,12 +235,26 @@ export const tipNotesChanged = notes => {
   }
 }
 
+export const tipRatingChanged = rating => {
+  return {
+    type: TIP_RATING_CHANGED,
+    payload: rating
+  }
+}
+
 export const tipShiftChanged = (shift) => {
   return {
     type: TIP_SHIFT_CHANGED,
     payload: shift
   };
 };
+
+export const stepChanged = step => {
+  return {
+    type: STEP_CHANGED,
+    payload: step
+  }
+}
 
 export const tipAmountChanged = (amount) => {
   let acceptable='0123456789.$'
@@ -252,12 +274,12 @@ export const tipAmountChanged = (amount) => {
 };
 
 export const tipDateChanged = (date) => {
-  const splitDate = date.split('/');
-  const d = new Date(splitDate[0], (splitDate [1] - 1), splitDate[2]);
+  // const splitDate = date.split('/');
+  // const d = new Date(splitDate[0], (splitDate [1] - 1), splitDate[2]);
 
   return {
     type: TIP_DATE_CHANGED,
-    payload: d
+    payload: date
   };
 };
 

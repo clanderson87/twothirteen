@@ -2,6 +2,8 @@ import { TabNavigator, TabBarTop } from 'react-navigation'; //IF NOT react-navig
 import AuthScreen from '../screens/AuthScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import MainFlowTabNavigator from './MainFlowTabNavigator';
+import AddOrEditNavigator from './AddOrEditNavigator';
+
 import { OS } from '../styles';
 
 // JANKY WORKAROUND FOR NOT SHOWING IN ANDROID
@@ -22,7 +24,8 @@ if(OS === 'android'){
 const OnInitialLoadOrSignoutNavigator = TabNavigator({
 	welcome: { screen: WelcomeScreen },
 	auth: { screen: AuthScreen },
-	main: { screen: MainFlowTabNavigator }
+	main: { screen: MainFlowTabNavigator },
+	AddTip: { screen: AddOrEditNavigator }
 }, secondaryNavOptions);
 
 export default OnInitialLoadOrSignoutNavigator;

@@ -68,7 +68,8 @@ const firebaseLogin = (token, dispatch, provider) => {
       }
     )
     .catch(error => {
-      const _error = handleFirebaseErrors(error, provider);
+      let _error = handleFirebaseErrors(error, provider);
+      console.log('_error passed to redux is:', _error);
       return dispatch({ type: ERROR, payload: _error });
     });
 }
@@ -120,12 +121,21 @@ export const testForTokens = () => async dispatch => {
   }
 };
 
-const deleteTokens = async () => {
-  await AsyncStorage.multiRemove(['fb_token', 'google_token']);
+const deleteTokens = async (arg = null) => {
+  if(arg === null){
+    await AsyncStorage.multiRemove(['fb_token', 'google_token']);
+  }
+  if(arg === 'facebook'){
+    await AsyncStorage.removeItem('fb_token');
+  }
+  if(arg === 'google'){
+    await AsyncStorage.removeItem('google_token');
+  }
 }
 
-const handleFirebaseErrors = async (error, provider) => {
-  console.log('error is ', error);
+const handleFirebaseErrors = (error, provider) => {
+  console.log('In HFE, Error is', error);
+  console.log('in HFE, Error.code is', error.code);
   switch(error.code){
     case 'auth/app-deleted':
       return { error, type:'authError', message: 'Try again later, we\'ve got some shenanigans to fix. Sorry :(' };
@@ -136,13 +146,13 @@ const handleFirebaseErrors = async (error, provider) => {
     case 'auth/invalid-api-key':
       return { error, type:'authError', message: 'Oh god, this should NEVER happen. This shouldn\'t take too long to fix, but someone IS getting fired' };
     case 'auth/invalid-user-token':
-      await deleteTokens();
+      deleteTokens();
       return { error, type:'authError', message: 'It\'s an old code, and it doesn\'t check out. Please Reauthenticate.' };
     case 'auth/network-request-failed':
-      await deleteTokens();
+      deleteTokens();
       return { error, type:'authError', message: 'Are you in a tunnel? Are we in a tunnel? Somebody\'s in a tunnel, because the interweb is down :(' };
     case 'auth/operation-not-allowed':
-      await deleteTokens();
+      deleteTokens();
       return { error, type:'authError', message: 'Nope. Try again with an acceptable provider' };
     case 'auth/requires-recent-login':
       return { error, type:'authError', message: 'Hold on... '}; //make sure to set up firebase.user.reauthenticateWithCredential
@@ -153,19 +163,15 @@ const handleFirebaseErrors = async (error, provider) => {
     case 'auth/user-disabled':
       return { error, type:'authError', message: 'Sorry pumpkin, you\'re no longer welcome at our party. Contact the devs if you think you\'ve reached this in error.' }
     case 'auth/user-token-expired':
-      await deleteTokens();
+      deleteTokens();
       return { error, type:'authError', message: 'Please sign in again.' };
     case 'auth/web-storage-unsupported':
       return { error, type:'authError', message: 'Web storage unsupported. We\'re gonna need that, thanks.' };
     case 'auth/account-exists-with-different-credential':
-      if(provider === 'facebook'){
-        await AsyncStorage.removeItem('fb_token');
-      } else if(provider === 'google'){
-        await AsyncStorage.removeItem('google_token');
-      }
+      deleteTokens(provider);
       return { error, type:'authError', message: `We found your account, but you didn't sign in with that provider last time. Please sign in with the correct provider!`}
     case 'auth/internal-error':
-      await deleteTokens();
-      return {error, type: 'authError', message: 'Something weird happened on our end. Please try to sign in again and we\'ll try to not suck so much :('}
+      deleteTokens();
+      return { type: 'authError', message: 'Something weird happened on our end. Please try to sign in again and we\'ll try to not suck so much :('}
   }
 }

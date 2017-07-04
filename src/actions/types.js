@@ -24,3 +24,5 @@ export const TIP_DATE_CHANGED = 'tip_date_changed';
 export const TIP_RESTAURANT_CHANGED = 'tip_restaurant_changed';
 export const TIP_SHIFT_CHANGED = 'tip_shift_changed';
 export const TIP_NOTES_CHANGED = 'tip_notes_changed';
+export const TIP_RATING_CHANGED = 'tip_rating_changed';
+export const STEP_CHANGED = 'step_changed';

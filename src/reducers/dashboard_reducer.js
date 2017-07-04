@@ -9,18 +9,38 @@ import {
   TIP_SHIFT_CHANGED,
   TIP_RESTAURANT_CHANGED,
   TIP_DATE_CHANGED,
-  TIP_AMOUNT_CHANGED
+  TIP_AMOUNT_CHANGED,
+  TIP_NOTES_CHANGED,
+  TIP_RATING_CHANGED,
+  STEP_CHANGED
 } from '../actions/types';
+
+const DUMMY_RESTAURANTS = [{
+  name: 'FAKE GRILL',
+  gId: 'FAKE GID',
+  imageUrl: 'http://placekitten.com/200/300',
+  address: '1111 FAKE ST'
+},
+{
+  name: 'BARLIES',
+  gId: 'NOPE',
+  imageUrl: 'http://placekitten.com/300/420',
+  address: '12345 BUTT LANE'
+}]
+
 const INITIAL_STATE = { 
   usersTips: [],
   usersAverage: null,
   usersProjected: null,
-  usersRestaurants: [],
+  usersRestaurants: DUMMY_RESTAURANTS,
   message: '',
   tipAmount: null,
   tipDate: new Date(),
   tipShift: "Lunch",
   tipRestaurant: '', //NB: once RESTAURANTS_AQUIRED fires, tipRestaurant shouldn't be defaulted back to null
+  tipNotes: '',
+  tipRating: 3,
+  step: 'amount needed',
   selectedTip: null
 };
 
@@ -34,6 +54,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, 
         message: payload.message,
         tipAmount: null,
+        navigateTo: 'Subflow',
+        step: 'amount needed'
       };
     case ADD_TIP_FAIL:
       return { ...state, message: payload.message };
@@ -63,6 +85,12 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, tipDate: payload };
     case TIP_AMOUNT_CHANGED:
       return { ...state, tipAmount: payload.amount, message: payload.message };
+    case TIP_NOTES_CHANGED:
+      return { ...state, tipNotes: payload };
+    case TIP_RATING_CHANGED:
+      return { ...state, tipRating: payload };
+    case STEP_CHANGED:
+      return { ...state, step: payload };
     default:
       return state;
   }
