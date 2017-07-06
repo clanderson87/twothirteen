@@ -36,10 +36,12 @@ class AddBudgetScreen extends Component {
     return (
       <DateTimePicker
         mode = 'date'
-        onConfirm = {(date) => {this.props.setBudgetKeyValue}} 
-        onCancel = {() => {}}/>
+        onConfirm = {(date) => {this.props.setBudgetKeyValue('date', date)}} 
+        onCancel = {() => {}} />
     )
   }
+
+  //TODO: THIS WILL WORK MUCH BETTER WITH A SWIPE DECK TO MODIFY MULTIPLE PROPERTIES!!!
 
   renderSlideInputs = item => {
     return (

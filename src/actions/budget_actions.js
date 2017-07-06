@@ -32,3 +32,9 @@ export const getCatagories = () => {
     });
   };
 };
+
+export const setBudgetKeyValue = (key, val) => {
+  return {
+    
+  }
+}
