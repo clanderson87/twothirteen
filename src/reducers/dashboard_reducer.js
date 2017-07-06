@@ -20,22 +20,23 @@ const DUMMY_RESTAURANTS = [{
   gId: 'FAKE GID',
   imageUrl: 'http://placekitten.com/200/300',
   address: '1111 FAKE ST'
-},
+}/*,
 {
   name: 'BARLIES',
   gId: 'NOPE',
   imageUrl: 'http://placekitten.com/300/420',
   address: '12345 BUTT LANE'
-}]
+}*/
+]
 
 const INITIAL_STATE = { 
   usersTips: [],
-  usersAverage: null,
+  usersAverage: 100,
   usersProjected: null,
   usersRestaurants: DUMMY_RESTAURANTS,
   message: '',
   tipAmount: null,
-  tipDate: new Date(),
+  tipDate: null,
   tipShift: "Lunch",
   tipRestaurant: '', //NB: once RESTAURANTS_AQUIRED fires, tipRestaurant shouldn't be defaulted back to null
   tipNotes: '',
@@ -47,14 +48,14 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, { type, payload }) => {
   switch(type){
     case GET_INITIAL:
-      return { ...state, usersTips: payload.tips, usersAverage: payload.avg };
+      return { ...state, usersTips: payload.tips, usersAverage: payload.avg, usersHourlyAvg: payload.hourlyAvg };
     case RESTAURANTS_AQUIRED:
       return { ...state, usersRestaurants: payload, tipRestaurant: payload[0].gId }
     case ADD_TIP_SUCCESS:
       return { ...state, 
         message: payload.message,
         tipAmount: null,
-        navigateTo: 'Subflow',
+        navigateTo: 'Dashboard',
         step: 'amount needed'
       };
     case ADD_TIP_FAIL:
@@ -82,6 +83,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case TIP_RESTAURANT_CHANGED:
       return { ...state, tipRestaurant: payload };
     case TIP_DATE_CHANGED:
+      console.log('Date changed!', payload, typeof(payload));
       return { ...state, tipDate: payload };
     case TIP_AMOUNT_CHANGED:
       return { ...state, tipAmount: payload.amount, message: payload.message };

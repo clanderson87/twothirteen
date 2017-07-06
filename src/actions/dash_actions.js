@@ -23,32 +23,32 @@ const getUsersProjected = (provided) => {
   //fill this in later...
 }
 
-const sanitizeShift = (shift) => {
-  let hour = 3600000;
-  switch(shift){
-    case 'Breakfast':
-      return hour * 7.5;
-    case 'Brunch':
-      return hour * 10.25;
-    case 'Lunch':
-      return hour * 12;
-    case 'Happy Hour':
-      return hour * 15.5;
-    case 'Dinner':
-      return hour * 16;
-    case 'Late Night':
-      return hour * 23;
-    default:
-      return hour * 12;
-  }
-}
+// const sanitizeShift = (shift) => {
+//   let hour = 3600000;
+//   switch(shift){
+//     case 'Breakfast':
+//       return hour * 7.5;
+//     case 'Brunch':
+//       return hour * 10.25;
+//     case 'Lunch':
+//       return hour * 12;
+//     case 'Happy Hour':
+//       return hour * 15.5;
+//     case 'Dinner':
+//       return hour * 16;
+//     case 'Late Night':
+//       return hour * 23;
+//     default:
+//       return hour * 12;
+//   }
+// }
 
-const sanitizeDate = (date, shift) => {
-  if(typeof(date) !== 'string'){
-    date = (new Date(date).toLocaleDateString());
-  };
-  return (new Date(`${date} `+`${sanitizeShift(shift)}`).getTime());
-}
+// const sanitizeDate = (date) => {
+//   if(typeof(date) !== 'string'){
+//     date = (new Date(date).toLocaleDateString());
+//   };
+//   return (new Date(`${date} `+`${sanitizeShift(shift)}`).getTime());
+// }
 
 
 const generatePayload = (provided = null, message = null) => {
@@ -69,15 +69,20 @@ const generatePayload = (provided = null, message = null) => {
     }
   } else {
     const providedArr = Object.values(provided);
-    let total = providedArr.reduce((totes, val) => {
-      return totes += val.amount;
-    }, 0);
+    let totalObject = providedArr.reduce((totals, tip) => {
+      totals.amount += tip.amount;
+      totals.hours += tip.hours;
+      console.log('totals is', totals);
+      return totals;
+    }, { amount: 0, hours: 0 });
 
     payload = { 
       message,
-      avg: Math.round(total/providedArr.length),
+      avg: Math.round(totalObject.amount/providedArr.length),
+      hourlyAvg: Math.round(totalObject.amount/totalObject.hours),
       tips: providedArr
     };
+    console.log('payload.hourlyAvg is', payload.hourlyAvg)
   }
   return payload;
 };
@@ -118,25 +123,26 @@ export const getInitial = () => {
 
 export const addTip = ({amount, date, restaurant, shift, notes, rating}) => {
   const tipRef = firebase.database().ref('tips').push();
-  const protoDate = new Date();
-  const offset = protoDate.getTimezoneOffset() * 60000;
-  const tipDate = new Date(date.timestamp + offset + sanitizeShift(shift));
+  let hours = parseFloat((((shift - date) / 60000) / 60).toFixed(2));
+  amount = parseInt(amount)
   let tip = {
-    restaurant,
-    shift,
-    amount: parseInt(amount),
-    date: tipDate.getUTCMilliseconds(),
+    restaurant: restaurant.gId,
+    shift: shift.getTime(),
+    hours,
+    notes,
+    rating,
+    amount,
+    date: date.getTime(),
     uuid: firebase.auth().currentUser.uid,
     tId: tipRef.key,
-    added: protoDate.getTime(),
-    weekday: dayOfWeek(tipDate.getDay())
+    added: new Date().getTime(),
+    weekday: dayOfWeek(date.getDay()),
+    perHour: parseFloat((amount / hours).toFixed(2))
     //methods to add server side:
       //weather
       //events
       //cuisene type
   };
-  
-  console.log('in add tip, tip is', tip);
   return (dispatch) => {
     const successAddAction = (tip) => {
       dispatch({

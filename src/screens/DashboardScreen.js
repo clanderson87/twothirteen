@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Dimensions } from 'react-native';
-import { Avatar, List, ListItem } from 'react-native-elements';
+import { Avatar, List, ListItem, Grid, Row, Col } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { CLEAR, IOS_BLUE } from '../colors';
 import { OS } from '../styles';
@@ -15,7 +15,6 @@ import { addItemToUser } from '../actions/firebase_helpers';
 class DashboardScreen extends Component {
 
   componentDidMount(){
-
     this.props.getInitial();
     //this.props.getRestaurants();
   };
@@ -40,6 +39,7 @@ class DashboardScreen extends Component {
               <ListItem
                 key = { i }
                 title = { t.amount }
+                rightTitle = { new Date(t.date).toLocaleDateString() }
                 onPress = {() => this.goToTipDetail(t)}
                 hideChevron
               />
@@ -82,15 +82,28 @@ class DashboardScreen extends Component {
     )
   }
 
-  renderRow = () => {
-    
-  };
-
   render() {
+    let rowThickness = Dimensions.get('window').height / 7
     return (
-      <View>
-        {this.renderList()}
-        {this.generateAddFAB()}
+      <View style = {{ flex: 1 }}>
+      <Grid >
+        <Row containerStyle = {{ height: rowThickness }}>
+          <Col>
+            <Text style = {{ fontSize: 18, textAlign: 'center' }}>average</Text>
+            <Text style = {{ fontSize: 36, textAlign: 'center' }}>{this.props.usersAverage}</Text>
+          </Col>
+          <Col>
+            <Text style = {{ fontSize: 18, textAlign: 'center' }}>hourly</Text>
+            <Text style = {{ fontSize: 36, textAlign: 'center' }}>{this.props.usersHourlyAvg}</Text>
+          </Col>
+          <Col>
+            <Text style = {{ fontSize: 18, textAlign: 'center' }}>progress</Text>
+            <Text style = {{ fontSize: 36, textAlign: 'center' }}>{this.props.usersAverage}</Text>
+          </Col>
+        </Row>
+          {this.renderList()}
+          {this.generateAddFAB()}
+      </Grid>
       </View>
     );
   }
@@ -100,13 +113,15 @@ const mapStateToProps = ({ dashboard }) => {
   const { 
     usersTips,
     usersAverage,
+    usersHourlyAvg,
     usersProjected,
     message,
-    selectedTip
+    selectedTip,
   } = dashboard;
   return { 
     usersTips,
     usersAverage,
+    usersHourlyAvg,
     usersProjected,
     message,
     selectedTip 

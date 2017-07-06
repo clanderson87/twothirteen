@@ -10,9 +10,13 @@ class AuthScreen extends Component {
       this.props.testForTokens();
       this.onAuthComplete(this.props);
     }
+    if(this.props.authenticated){
+      this.props.navigation.navigate('Dashboard');
+    }
   }
 
   componentWillReceiveProps(nextProps){
+    console.log('componentWillRecieveProps is being called with', nextProps.authenticated)
     this.onAuthComplete(nextProps);
   }
 
@@ -25,8 +29,8 @@ class AuthScreen extends Component {
       props.googleLogin(props.token);
     };
 
-    if(props.authenticated && !props.error){
-      this.props.navigation.navigate('Subflow');
+    if(props.authenticated){
+      this.props.navigation.navigate('Dashboard');
     }
   }
 

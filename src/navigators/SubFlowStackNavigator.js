@@ -3,7 +3,7 @@ import DashboardScreen from '../screens/DashboardScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const SubFlowStackNavigator = StackNavigator({
-  Dashboard: { screen: DashboardScreen },
+  Dash: { screen: DashboardScreen },
   Detail: { screen: SettingsScreen },
 });
 

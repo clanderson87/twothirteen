@@ -19,7 +19,7 @@ import {
   Grid,
   Row
 } from 'react-native-elements';
-import { Calendar } from 'react-native-calendars';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 import { OS } from '../styles'
 import {
   tipAmountChanged,
@@ -58,16 +58,29 @@ class AddScreen extends Component {
     );
   };
 
-  returnMarkedDates = () => {
-    if(this.props.tipDate.dateString){
-      let marked = {}
-      marked[this.props.tipDate.dateString] = { selected : true }
-      console.log(marked);
-      return marked;
-    }
-    else {
-      return {};
-    }
+  renderEndDatePicker = () => {
+    return ( 
+      <DateTimePicker
+        mode = 'time'
+        isVisible = { true }
+        onConfirm = {(shift) => {this.props.tipShiftChanged(shift), this.props.stepChanged('other needed')}}
+        onCancel = {() => this.props.stepChanged('date needed')}
+        titleIOS = 'When did your shift end?'
+        cancelTextIOS = 'Go back'
+        is24Hour = { false }
+      /> 
+    )
+  }
+
+  skipRestaurantSelection = () => {
+    this.props.tipRestuarantChanged(this.props.usersRestaurants[0]);
+    this.props.stepChanged('date needed');
+  }
+
+  fromAmount = () => {
+    this.props.usersRestaurants.length === 1 ? 
+      this.skipRestaurantSelection() : 
+      this.props.stepChanged('restaurant needed');
   }
 
   renderAddFormStepByStep = () => {
@@ -75,11 +88,11 @@ class AddScreen extends Component {
       case 'amount needed':
         return (
           <View>
-            <FormLabel>Amount</FormLabel>
+            <FormLabel style = {{ alignSelf: 'center' }} >Amount</FormLabel>
             <FormInput 
               onChangeText = {(tip) => this.props.tipAmountChanged(tip)} 
               keyboardType = 'numeric'
-              onEndEditing = {() => this.props.stepChanged('restaurant needed')}
+              onEndEditing = {() => this.fromAmount()}
               value = {this.props.tipAmount}
             />
             {
@@ -87,13 +100,16 @@ class AddScreen extends Component {
               <Text>{this.props.message}</Text> :
               null
             }
+            <Button
+              style = {{ marginVertical: 40 }}
+              onPress = {() => this.fromAmount()} 
+              title = 'next' />
           </View>
         );
       case 'restaurant needed':
         return (
           <View>
             <FlatList
-              horizontal
               data = {this.props.usersRestaurants}
               keyExtractor = { item => item.gId }
               renderItem = {({item}) => {
@@ -115,81 +131,48 @@ class AddScreen extends Component {
         );
       case 'date needed':
         return (
-          <Grid style = {{ flex: 1 }}>
-            <Row size = {1} />
-            <Row size = {3}>
-              <Calendar 
-                hideExtraDays
-                onDayPress = {(day) => this.props.tipDateChanged(day)}
-                firstDay = {1}
-                markedDates = {this.returnMarkedDates()}
-                style={{
-                  height: 350,
-                  flex: 7
-                }}
-                theme = {{
-                  textSectionTitleColor: '#b6c1cd',
-                  selectedDayBackgroundColor: '#dddddd',
-                  selectedDayTextColor: '#ffffff',
-                  todayTextColor: '#00adf5',
-                  dayTextColor: '#2d4150',
-                  textDisabledColor: '#d9e1e8',
-                  dotColor: '#00adf5',
-                  selectedDotColor: '#abcdef',
-                  arrowColor: 'orange',
-                  monthTextColor: 'blue'
-                }}
-              />
-            </Row>
-            <Row size = {1}>
-              {this.props.tipDate.dateString ? 
-                <Button 
-                onPress = {() => this.props.stepChanged('shift needed')} 
-                title = { 'Next' } 
-                />
-              : null }
-            </Row> 
-          </Grid>
+          <DateTimePicker
+            mode = 'datetime'
+            isVisible = { true }
+            onConfirm = {(date) => {this.props.tipDateChanged(date), this.props.stepChanged('shift needed')}}
+            onCancel = {() => this.props.stepChanged('restaurant needed')}
+            titleIOS = 'When did your shift start?'
+            cancelTextIOS = 'Go back'
+            is24Hour = { false }
+          />
         );
       case 'shift needed':
         return (
-          <View>
-            <FormLabel>Shift</FormLabel>
-            <Picker
-              selectedValue = { this.props.tipShift }
-              onValueChange = {(shift) => this.props.tipShiftChanged(shift)}
-            >
-              <Picker.Item label = 'Breakfast' value = 'Breakfast' />
-              <Picker.Item label = 'Brunch' value = 'Brunch' />
-              <Picker.Item label = 'Lunch' value = 'Lunch' />
-              <Picker.Item label = 'Happy Hour' value = 'Happy Hour' />
-              <Picker.Item label = 'Dinner' value = 'Dinner' />
-              <Picker.Item label = 'Late Night' value = 'Late Night' />
-            </Picker>
-            <Button 
-              onPress = {() => this.props.stepChanged('other needed')}
-              title = { 'Next' } />
-          </View>
+          OS === 'ios' ?
+          this.renderEndDatePicker()
+          :
+          <TouchableNativeFeedback
+            onPress = {() => { return (this.renderEndDatePicker())}}>
+            <View style = {{ flex: 1, backgroundColor: 'green' }}>
+              <Text>Set Shift End Time</Text>
+            </View>
+          </TouchableNativeFeedback>
         );
       case 'other needed':
         return (
-          <View>
-            <FormLabel>How was the shift?</FormLabel>
+          <View style = {{ justifyContent: 'space-around' }}>
             <Rating
               showRating
               type="star"
               fractions={1}
               startingValue={3.0}
-              imageSize={40}
+              imageSize={50}
               onFinishRating={(rating) => this.props.tipRatingChanged(rating)}
-              style={{ paddingVertical: 10 }}
+              style = {{ alignItems: 'center' }}
             />
-            <Divider />
-            <FormLabel>Notes</FormLabel>
-            <FormInput 
+            <Divider style = {{ marginVertical: 40 }} />
+            <FormLabel style = {{ alignItems: 'center' }}>Notes</FormLabel>
+            <FormInput style = {{ height: 100 }}
+              multiline = {true}
               onChangeText = {(text) => this.props.tipNotesChanged(text)} 
             />
-            <Button 
+            <Divider style = {{ marginVertical: 40 }} />
+            <Button
               onPress = {() => this.props.addTip({
                 amount: this.props.tipAmount,
                 restaurant: this.props.tipRestaurant,
@@ -204,10 +187,9 @@ class AddScreen extends Component {
     }
   }
 
-
   render(){
     return (
-      <View style = {{ flex: 1, justifyContent: 'center' }} >
+      <View style = {{ flex: 1, justifyContent: 'center'}}>
         {this.renderAddFormStepByStep()}
       </View>
     )
