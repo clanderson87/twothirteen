@@ -26,3 +26,5 @@ export const TIP_SHIFT_CHANGED = 'tip_shift_changed';
 export const TIP_NOTES_CHANGED = 'tip_notes_changed';
 export const TIP_RATING_CHANGED = 'tip_rating_changed';
 export const STEP_CHANGED = 'step_changed';
+export const BUDGET_NOT_FOUND = 'budget_not_found';
+export const BUDGET_FOUND = 'budget_found';

@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import AsyncStorage from 'react-native';
 import { 
   GET_INITIAL,
   RESTAURANTS_AQUIRED,
@@ -14,7 +15,9 @@ import {
   TIP_RESTAURANT_CHANGED,
   TIP_NOTES_CHANGED,
   TIP_RATING_CHANGED,
-  STEP_CHANGED
+  STEP_CHANGED,
+  BUDGET_FOUND,
+  BUDGET_NOT_FOUND
 } from './types';
 import { dayOfWeek } from '../common/dateHelpers';
 
@@ -88,6 +91,22 @@ const generatePayload = (provided = null, message = null) => {
 };
 
 //exported
+
+export const checkForBudget = () => async dispatch => {
+  try{
+    let budgetId = await AsyncStorage.getItem('budgetID');
+    let action = budgetId ? {
+      type: BUDGET_FOUND,
+      payload: budgetId
+    }
+    :
+    { type: BUDGET_NOT_FOUND }
+    dispatch(action);
+  } catch (e) {
+    console.log('in checkForBudget, error is', e);
+    return null;
+  }
+}
 
 export const getRestaurants = () => {
   const { currentUser } = firebase.auth();

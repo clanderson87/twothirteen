@@ -9,6 +9,7 @@ import {
   getRestaurants,
   selectTip,
   unselectTip,
+  checkForBudget
 } from '../actions';
 import { addItemToUser } from '../actions/firebase_helpers';
 
@@ -16,6 +17,10 @@ class DashboardScreen extends Component {
 
   componentDidMount(){
     this.props.getInitial();
+    this.props.checkForBudget();
+    if(!this.props.budget){
+      this.props.navigation.navigate('AddBudgetScreen');
+    }
     //this.props.getRestaurants();
   };
 
@@ -117,6 +122,7 @@ const mapStateToProps = ({ dashboard }) => {
     usersProjected,
     message,
     selectedTip,
+    budget
   } = dashboard;
   return { 
     usersTips,
@@ -124,7 +130,8 @@ const mapStateToProps = ({ dashboard }) => {
     usersHourlyAvg,
     usersProjected,
     message,
-    selectedTip 
+    selectedTip,
+    budget
   }
 }
 
@@ -132,5 +139,6 @@ export default connect(mapStateToProps, {
   getInitial,
   getRestaurants,
   selectTip,
-  unselectTip
+  unselectTip,
+  checkForBudget
 })(DashboardScreen)
