@@ -4,7 +4,7 @@ import SubFlowStackNavigator from './SubFlowStackNavigator';
 import AddOrEditNavigator from './AddOrEditNavigator';
 
 const MainFlowTabNavigator = TabNavigator({
-  Subflow: { screen: SubFlowStackNavigator },
+  Dashboard: { screen: SubFlowStackNavigator },
   Map: { screen: MapScreen },
 });
 

@@ -69,15 +69,20 @@ const generatePayload = (provided = null, message = null) => {
     }
   } else {
     const providedArr = Object.values(provided);
-    let total = providedArr.reduce((totes, val) => {
-      return totes += val.amount;
-    }, 0);
+    let totalObject = providedArr.reduce((totals, tip) => {
+      totals.amount += tip.amount;
+      totals.hours += tip.hours;
+      console.log('totals is', totals);
+      return totals;
+    }, { amount: 0, hours: 0 });
 
     payload = { 
       message,
-      avg: Math.round(total/providedArr.length),
+      avg: Math.round(totalObject.amount/providedArr.length),
+      hourlyAvg: Math.round(totalObject.amount/totalObject.hours),
       tips: providedArr
     };
+    console.log('payload.hourlyAvg is', payload.hourlyAvg)
   }
   return payload;
 };
@@ -118,21 +123,21 @@ export const getInitial = () => {
 
 export const addTip = ({amount, date, restaurant, shift, notes, rating}) => {
   const tipRef = firebase.database().ref('tips').push();
-  console.log('shift is:', shift, 'date is:', date);
-  let hours = (((shift - date) / 60000) / 60).toFixed(2);
-  console.log('hours is ', hours)
+  let hours = parseFloat((((shift - date) / 60000) / 60).toFixed(2));
   amount = parseInt(amount)
   let tip = {
     restaurant: restaurant.gId,
     shift: shift.getTime(),
     hours,
+    notes,
+    rating,
     amount,
     date: date.getTime(),
     uuid: firebase.auth().currentUser.uid,
     tId: tipRef.key,
     added: new Date().getTime(),
     weekday: dayOfWeek(date.getDay()),
-    perHour: (amount / hours).toFixed(2)
+    perHour: parseFloat((amount / hours).toFixed(2))
     //methods to add server side:
       //weather
       //events

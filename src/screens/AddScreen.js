@@ -72,16 +72,27 @@ class AddScreen extends Component {
     )
   }
 
+  skipRestaurantSelection = () => {
+    this.props.tipRestuarantChanged(this.props.usersRestaurants[0]);
+    this.props.stepChanged('date needed');
+  }
+
+  fromAmount = () => {
+    this.props.usersRestaurants.length === 1 ? 
+      this.skipRestaurantSelection() : 
+      this.props.stepChanged('restaurant needed');
+  }
+
   renderAddFormStepByStep = () => {
     switch(this.props.step) {
       case 'amount needed':
         return (
           <View>
-            <FormLabel>Amount</FormLabel>
+            <FormLabel style = {{ alignSelf: 'center' }} >Amount</FormLabel>
             <FormInput 
               onChangeText = {(tip) => this.props.tipAmountChanged(tip)} 
               keyboardType = 'numeric'
-              onEndEditing = {() => this.props.stepChanged('restaurant needed')}
+              onEndEditing = {() => this.fromAmount()}
               value = {this.props.tipAmount}
             />
             {
@@ -89,6 +100,10 @@ class AddScreen extends Component {
               <Text>{this.props.message}</Text> :
               null
             }
+            <Button
+              style = {{ marginVertical: 40 }}
+              onPress = {() => this.fromAmount()} 
+              title = 'next' />
           </View>
         );
       case 'restaurant needed':
@@ -140,23 +155,24 @@ class AddScreen extends Component {
         );
       case 'other needed':
         return (
-          <View>
-            <FormLabel>How was the shift?</FormLabel>
+          <View style = {{ justifyContent: 'space-around' }}>
             <Rating
               showRating
               type="star"
               fractions={1}
               startingValue={3.0}
-              imageSize={40}
+              imageSize={50}
               onFinishRating={(rating) => this.props.tipRatingChanged(rating)}
-              style={{ paddingVertical: 10 }}
+              style = {{ alignItems: 'center' }}
             />
-            <Divider />
-            <FormLabel>Notes</FormLabel>
-            <FormInput 
+            <Divider style = {{ marginVertical: 40 }} />
+            <FormLabel style = {{ alignItems: 'center' }}>Notes</FormLabel>
+            <FormInput style = {{ height: 100 }}
+              multiline = {true}
               onChangeText = {(text) => this.props.tipNotesChanged(text)} 
             />
-            <Button 
+            <Divider style = {{ marginVertical: 40 }} />
+            <Button
               onPress = {() => this.props.addTip({
                 amount: this.props.tipAmount,
                 restaurant: this.props.tipRestaurant,
@@ -171,10 +187,9 @@ class AddScreen extends Component {
     }
   }
 
-
   render(){
     return (
-      <View style = {{ flex: 1, justifyContent: 'center' }} >
+      <View style = {{ flex: 1, justifyContent: 'center'}}>
         {this.renderAddFormStepByStep()}
       </View>
     )
