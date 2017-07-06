@@ -194,16 +194,14 @@ export const deleteTip = ({ tId }) => {
             payload: {
               message: 'tip deleted successfully!'
             }
-          }),
-          //navigate here!
+          })
         )
         .catch(err => dispatch({
             type: DELETE_TIP,
             payload: {
               message: err
             }
-          }),
-          //navigate here!
+          })
         )
       })
   }

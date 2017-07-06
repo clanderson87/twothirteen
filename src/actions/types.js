@@ -28,3 +28,7 @@ export const TIP_RATING_CHANGED = 'tip_rating_changed';
 export const STEP_CHANGED = 'step_changed';
 export const BUDGET_NOT_FOUND = 'budget_not_found';
 export const BUDGET_FOUND = 'budget_found';
+
+//budget state
+export const BUDGET_STEP_CHANGED = 'budget_step_changed';
+export const CATAGORIES_AQUIRED = 'catagories_aquired';

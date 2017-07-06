@@ -14,12 +14,7 @@ class WelcomeScreen extends Component {
   };
   
   onSlidesComplete = () => {
-    if(this.props.token){
-      console.log('token is', this.props.token);
-      this.props.navigation.navigate('auth');
-    } else {
-      this.props.navigation.navigate('auth');
-    }
+    this.props.navigation.navigate('auth');
   };
 
   renderSlidesOrNot(){
