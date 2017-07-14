@@ -47,6 +47,8 @@ export const affectBudgetItem = (key, val, obj) => {
   }
 }
 
+//With swipeDeck architecture, perhaps package all budgetItems before we
+
 export const uploadBudgetItem = budgetItem => {
   const biId = firebase.database().ref('budgetItems').push();
   budgetItem.date = budgetItem.date.getTime();

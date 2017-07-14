@@ -13,7 +13,7 @@ let INITIAL_BUDGET_ITEM = {
 }
 
 let INITIAL_STATE = {
-  budgetItem: { freq: null },
+  budgetItem: { freq: null, date: new Date(), amount: 300 },
   picker: false
 }
 

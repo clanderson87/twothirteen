@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, Picker, ScrollView } from 'react-native';
-import { Button, List, FormInput, FormLabel, Rating } from 'react-native-elements';
+import { View, Text, Picker } from 'react-native';
+import { Button, FormInput, FormLabel, Card, SwipeDeck } from 'react-native-elements';
 import { connect } from 'react-redux';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { slideTextStyle, slideSubTextStyle, buttonStyle, fullCentered, slideStyle } from '../styles';
@@ -38,43 +38,44 @@ class AddBudgetScreen extends Component {
     )
   }
 
-  renderSlides() {
-    return this.props.budgetCatagories.map((slide, index) => {
-      return (
-      <View 
-        key = { index }
-        style = {[fullCentered, slideStyle]} >
-        <FormLabel>{slide.title}</FormLabel>
+  onSwipeRight = () => {
+    this.props.uploadBudgetItem(this.props.budgetItem);
+  }
+
+  renderCard = card => {
+    return (
+      <Card>
+        <FormLabel>{ card.title }</FormLabel>
         <FormInput onChangeText = { (text) => this.props.affectBudgetItem('name', text, this.props.budgetItem) } placeholder = 'Bill Name'/>
         <FormLabel>Amount</FormLabel>
         <FormInput onChangeText = { (text) => this.props.affectBudgetItem('amount', text, this.props.budgetItem) } placeholder = '$500' keyboard = 'numeric'/>
         <FormLabel>Frequency</FormLabel>
-        <Picker style = {{ width: 300 }} onValueChange = { (freq) => {this.props.affectBudgetItem('freq', freq, this.props.budgetItem), console.log(this.props.budgetItem.freq)}}>
-          <Picker.Item label = 'Daily' value = 'daily' />
-          <Picker.Item label = 'Weekly' value = 'weekly' />
-          <Picker.Item label = 'Biweekly' value = 'biweekly' />
-          <Picker.Item label = 'Monthly' value = 'monthly' />
-          <Picker.Item label = 'Bimonthly' value = 'bimonthly' />
-          <Picker.Item label = 'Every 3 months' value = '3months' />
-          <Picker.Item label = 'Every 6 months' value = '6months' />
-          <Picker.Item label = 'Yearly' value = 'yearly' />
+        <Picker style = {{ width: 300 }} onValueChange = { (freq, index) => {this.props.affectBudgetItem('freq', freq, this.props.budgetItem)}} selectedValue = {this.props.budgetItem.freq}>
+          <Picker.Item id = {0} label = 'Daily' value = 'daily' />
+          <Picker.Item id = {1}  label = 'Weekly' value = 'weekly' />
+          <Picker.Item id = {2}  label = 'Biweekly' value = 'biweekly' />
+          <Picker.Item id = {3}  label = 'Monthly' value = 'monthly' />
+          <Picker.Item id = {4}  label = 'Bimonthly' value = 'bimonthly' />
+          <Picker.Item id = {5}  label = 'Every 3 months' value = '3months' />
+          <Picker.Item id = {6}  label = 'Every 6 months' value = '6months' />
+          <Picker.Item id = {7}  label = 'Yearly' value = 'yearly' />
         </Picker>
         <Button onPress = { () => this.props.showPicker(true) } title = 'Pick Due Date' />
-        { Object.keys(this.props.budgetItem) === ['amount', 'date', 'freq', 'name'] ? <Button onPress = { () => this.props.uploadBudgetItem(this.props.budgetItem)} title = 'Next' /> : null }
-      </View>
+      </Card>
       )
-    });
-  };
+    };
 
   render() {
     switch(this.props.budgetStep){
       case 'start budget':
       return (
-        <ScrollView
-          horizontal
-          pagingEnabled
-          style={{flex: 1 }}>
-          {this.renderSlides()}
+        <View>
+          <SwipeDeck
+            style = {{flex: 1 }}
+            data = {this.props.budgetCatagories}
+            renderCard = {this.renderCard}
+            onSwipeRight={this.onSwipeRight}>
+          </SwipeDeck>
           <DateTimePicker
             isVisible = { this.props.picker }
             onConfirm = { (date) => { this.props.affectBudgetItem('date', date, this.props.budgetItem), this.props.showPicker(false) }}
@@ -84,13 +85,11 @@ class AddBudgetScreen extends Component {
             cancelTextIOS = 'Go back'
             is24Hour = { false }
           />
-        </ScrollView>
+        </View>
       )
-    }
+    };
 
-    if(this.props.budgetId){
-      return this.renderSlides();
-    } else {
+    if(!this.props.budgetId){
       return (
         <View style = {fullCentered}>
           {this.renderBudgetModal()}
