@@ -9,11 +9,10 @@ import {
   ERROR
 } from '../actions/types';
 
-let INITIAL_BUDGET_ITEM = {
-}
+let INITIAL_BUDGET_ITEM = { freq: null, date: new Date(), amount: 300 }
 
 let INITIAL_STATE = {
-  budgetItem: { freq: null, date: new Date(), amount: 300 },
+  budgetItem: INITIAL_BUDGET_ITEM,
   picker: false
 }
 
@@ -31,6 +30,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       let nextState = { ...state, budgetItem: null }
       nextState.budgetItem = payload;
       return nextState;
+    case BUDGET_ITEM_ADDED_SUCCESS:
+      return { ...state, budgetItem: INITIAL_BUDGET_ITEM };
     case DISPLAY_PICKER:
       return { ...state, picker: true };
     case HIDE_PICKER:
