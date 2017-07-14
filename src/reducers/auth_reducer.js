@@ -26,7 +26,9 @@ export default (state = {loading: true}, { type, payload }) => {
     case GOOGLE_LOGIN_FAIL:
       return { ...state, token: null };
     case ERROR:
-      return { ...state, token: null, error: payload, provider: null, loading: false, message: payload.message }
+      let newState = { ...state, token: null, error: payload, provider: null, loading: false }
+      payload.message ? newState.message = payload.message : null;
+      return newState;
     default: 
       return state;
   }

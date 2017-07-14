@@ -163,9 +163,8 @@ export const addTip = ({amount, date, restaurant, shift, notes, rating}) => {
       //cuisene type
   };
   return (dispatch) => {
-    const successAddAction = (tip) => {
+    const successAddAction = () => {
       dispatch({
-        payload,
         type: ADD_TIP_SUCCESS
       });
       //navigate here!

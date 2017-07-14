@@ -35,7 +35,7 @@ class AuthScreen extends Component {
   }
 
   renderErrorMessage = () => {
-    if (this.props.error){
+    if(this.props.error){
       return (
         <Text>{this.props.error.message}</Text>
       )

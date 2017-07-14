@@ -173,5 +173,8 @@ const handleFirebaseErrors = (error, provider) => {
     case 'auth/internal-error':
       deleteTokens();
       return { type: 'authError', message: 'Something weird happened on our end. Please try to sign in again and we\'ll try to not suck so much :('}
+    default:
+      deleteTokens();
+      return { type: 'authError', message: 'Please sign in again' }
   }
 }
