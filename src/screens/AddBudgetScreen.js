@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, Picker } from 'react-native';
+import { View, Text, Picker, Alert } from 'react-native';
 import { Button, FormInput, FormLabel, Card, SwipeDeck } from 'react-native-elements';
 import { connect } from 'react-redux';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import FadeInView from 'react-native-fade-in-view';
 import { slideTextStyle, slideSubTextStyle, buttonStyle, fullCentered, slideStyle } from '../styles';
-import { setBudgetStep, getCatagories, affectBudgetItem, uploadBudgetItem, showPicker } from '../actions';
+import { setBudgetStep, getCatagories, affectBudgetItem, uploadBudgetItem, showPicker, addMoreMiscCards } from '../actions';
 import SlidesWithInput from '../components/SlidesWithInput';
 
 
@@ -27,15 +28,22 @@ class AddBudgetScreen extends Component {
       <View style = {fullCentered} >
         <Text style = { slideTextStyle }>Set up your budget</Text>
         <Text style = { slideSubTextStyle }>Let's figure out how many bottles you need to sell</Text>
-        <Button
-          style = { buttonStyle }
-          onPress = {() => this.props.setBudgetStep('start budget')}
-          title = { 'Let\'s go!' } />
-        <Button
-          style = {  buttonStyle}
-          onPress = {() => this.props.navigation.navigate('Dashboard')}
-          title = { 'Not yet' }
-        />
+        { this.props.budgetCatagories 
+          ? 
+          <FadeInView
+            duration={400}>
+            <Button
+              style = { buttonStyle }
+              onPress = {() => this.props.setBudgetStep('start budget')}
+              title = { 'Let\'s go!' } />
+            <Button
+              style = {  buttonStyle}
+              onPress = {() => this.props.navigation.navigate('Dashboard')}
+              title = { 'Not yet' }
+            />
+          </FadeInView>
+        :
+        null}
       </View>
     )
   }
@@ -43,6 +51,50 @@ class AddBudgetScreen extends Component {
   onSwipeRight = () => {
     this.props.uploadBudgetItem(this.props.budgetItem);
   }
+
+  addBudgetItemCards = () => {
+    console.log('addBudgetItemCards is being called!')
+    this.props.addMoreMiscCards();
+    this.props.setBudgetStep('more cards');
+    return(
+      <FadeInView>
+        <SwipeDeck
+          style = {{ flex: 1 }}
+          data = { this.props.budgetCatagories }
+          renderCard = { this.renderCard }
+          onSwipeRight = { this.onSwipeRight }
+          onSwipeLeft =  { () => {} }
+          renderNoMoreCards = { this.renderNoMoreCards }>
+        </SwipeDeck>
+      </FadeInView>
+    )
+  }
+
+  backToDashboard = () => {
+    Alert.alert( 'Remember...', 'You can always adjust your budget in the settings',
+    [ {text: 'Ok', onPress: () => this.props.navigation.navigate('Dashboard')}]);
+  }
+
+  renderNoMoreCards = () => {
+    return(
+      <View>
+        <FadeInView>
+          <Text style = { slideTextStyle }>All done!</Text>
+          <Text style = { slideSubTextStyle }>Anything else you need to add?</Text>
+          <FadeInView
+            duration = {250}>
+            <Button onPress = { () => this.backToDashboard() } title = { 'Nope, all set!' } />
+            <Button onPress = { () => this.props.addMoreMiscCards() } title = { 'Just a few more...'} />
+          </FadeInView>
+        </FadeInView>
+      </View>
+    )
+  }
+
+  // onSwipeLeft = card => {
+    
+  //   this.props.budgetingCatagories.splice(this.props.budgetCatagories.indexOf(card), 1);
+  // }
 
   renderCard = card => {
     return (
@@ -69,14 +121,16 @@ class AddBudgetScreen extends Component {
 
   render() {
     switch(this.props.budgetStep){
-      case 'start budget':
+      case 'start budget' || 'more cards':
       return (
         <View>
           <SwipeDeck
-            style = {{flex: 1 }}
-            data = {this.props.budgetCatagories}
-            renderCard = {this.renderCard}
-            onSwipeRight={this.onSwipeRight}>
+            style = {{ flex: 1 }}
+            data = { this.props.budgetCatagories }
+            renderCard = { this.renderCard }
+            onSwipeRight = { this.onSwipeRight }
+            onSwipeLeft =  { () => {} }
+            renderNoMoreCards = { this.renderNoMoreCards }>
           </SwipeDeck>
           <DateTimePicker
             isVisible = { this.props.picker }
@@ -116,5 +170,6 @@ export default connect(mapStateToProps, {
   getCatagories,
   affectBudgetItem,
   uploadBudgetItem,
+  addMoreMiscCards,
   showPicker
 })(AddBudgetScreen);

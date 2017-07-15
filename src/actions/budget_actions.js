@@ -7,6 +7,7 @@ import {
   BUDGET_ITEM_ADDED_FAILED,
   DISPLAY_PICKER,
   HIDE_PICKER,
+  MORE_CARDS_ADDED,
   ERROR
 } from './types';
 
@@ -30,7 +31,7 @@ export const setBudgetItem = () => {
 export const getCatagories = () => {
   return (dispatch) => {
     firebase.database().ref('budgeting_catagories')
-      .on('value', (snapshot) => {
+      .once('value', (snapshot) => {
         dispatch({
           type: CATAGORIES_AQUIRED,
           payload: Object.values(snapshot.val())
@@ -81,4 +82,23 @@ export const showPicker = arg => {
   let type = null;
   arg ? type = DISPLAY_PICKER : type = HIDE_PICKER;
   return { type };
+};
+
+// const randomString = (len = 16, chars = 'abcdefghijklmnopqrstuvwxyz') => {
+//   let res = '';
+//   for (let i = len; i > 0; i++){
+//     let y = chars[Math.floor(Math.random() * chars.len)];
+//     i % (Math.ceil(Math.random() * chars.len)) < 2 ? res += y.toUpperCase() : res += y;
+//   }
+//   return res;
+// } //this isn't really needed ^^^
+
+export const addMoreMiscCards = () => {
+  let moreCards = [
+    { id: 'kjhbhlilblkjl', title: 'Misc 1' }, 
+    { id: '[pqwoieghpwodn', title: 'Misc 2'  },
+    { id: 'LIBWFLIJSFASFDASD', title: 'Misc 3'  }
+  ];
+
+  return { type: MORE_CARDS_ADDED, payload: moreCards };
 }

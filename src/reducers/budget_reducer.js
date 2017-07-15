@@ -6,6 +6,7 @@ import {
   BUDGET_ITEM_ADDED_SUCCESS,
   DISPLAY_PICKER,
   HIDE_PICKER,
+  MORE_CARDS_ADDED,
   ERROR
 } from '../actions/types';
 
@@ -36,6 +37,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, picker: true };
     case HIDE_PICKER:
       return { ...state, picker: false };
+    case MORE_CARDS_ADDED:
+      return { ...state, budgetCatagories: payload };
     default:
       return { ...state };
   };

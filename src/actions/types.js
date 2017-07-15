@@ -37,3 +37,4 @@ export const BUDGET_ITEM_ADDED_SUCCESS = 'budget_item_added_success';
 export const BUDGET_ITEM_ADDED_FAILED = 'budget_item_add_failed';
 export const DISPLAY_PICKER = 'display_picker';
 export const HIDE_PICKER = 'hide_picker';
+export const MORE_CARDS_ADDED = 'more_cards_added';
