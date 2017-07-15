@@ -48,27 +48,18 @@ class AddBudgetScreen extends Component {
     )
   }
 
-  onSwipeRight = () => {
-    this.props.uploadBudgetItem(this.props.budgetItem);
+  onSwipeRight = card => {
+    this.props.uploadBudgetItem(this.props.budgetItem, card.title);
   }
 
-  addBudgetItemCards = () => {
-    console.log('addBudgetItemCards is being called!')
-    this.props.addMoreMiscCards();
-    this.props.setBudgetStep('more cards');
-    return(
-      <FadeInView>
-        <SwipeDeck
-          style = {{ flex: 1 }}
-          data = { this.props.budgetCatagories }
-          renderCard = { this.renderCard }
-          onSwipeRight = { this.onSwipeRight }
-          onSwipeLeft =  { () => {} }
-          renderNoMoreCards = { this.renderNoMoreCards }>
-        </SwipeDeck>
-      </FadeInView>
-    )
+  onSwipeLeft = card => {
+    if(card.misc){
+      console.log('Not uploading misc!!!!');
+      return;
+    };
+    this.props.uploadBudgetItem(this.props.budgetItem, card.title, 'VOID');
   }
+
 
   backToDashboard = () => {
     Alert.alert( 'Remember...', 'You can always adjust your budget in the settings',
@@ -90,11 +81,6 @@ class AddBudgetScreen extends Component {
       </View>
     )
   }
-
-  // onSwipeLeft = card => {
-    
-  //   this.props.budgetingCatagories.splice(this.props.budgetCatagories.indexOf(card), 1);
-  // }
 
   renderCard = card => {
     return (
@@ -121,7 +107,7 @@ class AddBudgetScreen extends Component {
 
   render() {
     switch(this.props.budgetStep){
-      case 'start budget' || 'more cards':
+      case 'start budget':
       return (
         <View>
           <SwipeDeck
@@ -129,7 +115,7 @@ class AddBudgetScreen extends Component {
             data = { this.props.budgetCatagories }
             renderCard = { this.renderCard }
             onSwipeRight = { this.onSwipeRight }
-            onSwipeLeft =  { () => {} }
+            onSwipeLeft =  { this.onSwipeLeft }
             renderNoMoreCards = { this.renderNoMoreCards }>
           </SwipeDeck>
           <DateTimePicker

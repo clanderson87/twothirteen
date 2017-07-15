@@ -50,12 +50,23 @@ export const affectBudgetItem = (key, val, obj) => {
 
 //With swipeDeck architecture, perhaps package all budgetItems before we
 
-export const uploadBudgetItem = budgetItem => {
+export const uploadBudgetItem = (budgetItem, type, arg = null) => {
   const biId = firebase.database().ref('budgetItems').push();
-  budgetItem.date = budgetItem.date.getTime();
-  budgetItem.amount = parseInt(budgetItem.amount);
+  budgetItem.type = type;
   budgetItem.uuid = firebase.auth().currentUser.uid;
   budgetItem.biId = biId.key;
+  if(arg !== null){
+    budgetItem.void = true;
+    budgetItem.amount = 0;
+    budgetItem.freq = null;
+    budgetItem.date = null;
+  } else {
+    if(budgetItem.freq === null){
+      budgetItem.freq = 'monthly'
+    };
+    budgetItem.date = budgetItem.date.getTime();
+    budgetItem.amount = parseInt(budgetItem.amount);
+  }
   
   return (dispatch) => {
     const successAddAction = () => {
@@ -95,9 +106,9 @@ export const showPicker = arg => {
 
 export const addMoreMiscCards = () => {
   let moreCards = [
-    { id: 'kjhbhlilblkjl', title: 'Misc 1' }, 
-    { id: '[pqwoieghpwodn', title: 'Misc 2'  },
-    { id: 'LIBWFLIJSFASFDASD', title: 'Misc 3'  }
+    { id: 'kjhbhlilblkjl', title: 'Misc 1', misc: true }, 
+    { id: '[pqwoieghpwodn', title: 'Misc 2', misc: true },
+    { id: 'LIBWFLIJSFASFDASD', title: 'Misc 3', misc: true }
   ];
 
   return { type: MORE_CARDS_ADDED, payload: moreCards };
