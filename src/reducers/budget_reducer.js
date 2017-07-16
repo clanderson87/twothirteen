@@ -7,6 +7,7 @@ import {
   DISPLAY_PICKER,
   HIDE_PICKER,
   MORE_CARDS_ADDED,
+  UIALERT_DISABLED,
   ERROR
 } from '../actions/types';
 
@@ -14,7 +15,8 @@ let INITIAL_BUDGET_ITEM = { freq: null, date: new Date(), amount: 300 }
 
 let INITIAL_STATE = {
   budgetItem: INITIAL_BUDGET_ITEM,
-  picker: false
+  picker: false,
+  uiAlert: true
 }
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -41,6 +43,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, budgetCatagories: payload };
     case ERROR: 
       return { ...state, error: payload };
+    case UIALERT_DISABLED:
+      return { ...state, uiAlert: false }
     default:
       return { ...state };
   };

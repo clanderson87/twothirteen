@@ -8,6 +8,7 @@ import {
   DISPLAY_PICKER,
   HIDE_PICKER,
   MORE_CARDS_ADDED,
+  UIALERT_DISABLED,
   ERROR
 } from './types';
 
@@ -104,4 +105,8 @@ export const addMoreMiscCards = () => {
   ];
 
   return { type: MORE_CARDS_ADDED, payload: moreCards };
+}
+
+export const disableUIAlert = () => {
+  return { type: UIALERT_DISABLED };
 }

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import FadeInView from 'react-native-fade-in-view';
 import { slideTextStyle, slideSubTextStyle, buttonStyle, fullCentered, slideStyle } from '../styles';
-import { setBudgetStep, getCatagories, affectBudgetItem, uploadBudgetItem, showPicker, addMoreMiscCards } from '../actions';
+import { setBudgetStep, getCatagories, affectBudgetItem, uploadBudgetItem, showPicker, addMoreMiscCards, disableUIAlert } from '../actions';
 import SlidesWithInput from '../components/SlidesWithInput';
 
 
@@ -126,8 +126,8 @@ class AddBudgetScreen extends Component {
             cancelTextIOS = 'Go back'
             is24Hour = { false }
           />
-          {Alert.alert( 'Info:', 'Swipe right to save an item to your budget. \nSwipe left to ignore it!',
-          [ {text: 'Ok', onPress: () => {}}])}
+          { this.props.uiAlert ? Alert.alert( 'Info:', 'Swipe right to save an item to your budget. \nSwipe left to ignore it!',
+          [ {text: 'Ok', onPress: () => {this.props.disableUIAlert()}}]) : null }
         </View>
       )
     };
@@ -147,9 +147,9 @@ class AddBudgetScreen extends Component {
 }
 
 const mapStateToProps = ({ budget, dashboard}) => {
-  const { budgetStep, budgetCatagories, budgetItem, picker } = budget;
+  const { budgetStep, budgetCatagories, budgetItem, picker, uiAlert } = budget;
   const budgetId = dashboard.budget;
-  return { budgetStep, budgetCatagories, budgetItem, budgetId, picker };
+  return { budgetStep, budgetCatagories, budgetItem, budgetId, picker, uiAlert };
 }
 
 export default connect(mapStateToProps, {
@@ -158,5 +158,6 @@ export default connect(mapStateToProps, {
   affectBudgetItem,
   uploadBudgetItem,
   addMoreMiscCards,
+  disableUIAlert,
   showPicker
 })(AddBudgetScreen);
