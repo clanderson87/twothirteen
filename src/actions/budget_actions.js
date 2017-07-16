@@ -95,14 +95,6 @@ export const showPicker = arg => {
   return { type };
 };
 
-// const randomString = (len = 16, chars = 'abcdefghijklmnopqrstuvwxyz') => {
-//   let res = '';
-//   for (let i = len; i > 0; i++){
-//     let y = chars[Math.floor(Math.random() * chars.len)];
-//     i % (Math.ceil(Math.random() * chars.len)) < 2 ? res += y.toUpperCase() : res += y;
-//   }
-//   return res;
-// } //this isn't really needed ^^^
 
 export const addMoreMiscCards = () => {
   let moreCards = [

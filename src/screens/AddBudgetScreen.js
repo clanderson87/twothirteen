@@ -37,7 +37,7 @@ class AddBudgetScreen extends Component {
               onPress = {() => this.props.setBudgetStep('start budget')}
               title = { 'Let\'s go!' } />
             <Button
-              style = {  buttonStyle}
+              style = { buttonStyle}
               onPress = {() => this.props.navigation.navigate('Dashboard')}
               title = { 'Not yet' }
             />
@@ -54,7 +54,6 @@ class AddBudgetScreen extends Component {
 
   onSwipeLeft = card => {
     if(card.misc){
-      console.log('Not uploading misc!!!!');
       return;
     };
     this.props.uploadBudgetItem(this.props.budgetItem, card.title, 'VOID');
@@ -74,8 +73,8 @@ class AddBudgetScreen extends Component {
           <Text style = { slideSubTextStyle }>Anything else you need to add?</Text>
           <FadeInView
             duration = {250}>
-            <Button onPress = { () => this.backToDashboard() } title = { 'Nope, all set!' } />
-            <Button onPress = { () => this.props.addMoreMiscCards() } title = { 'Just a few more...'} />
+            <Button style = { buttonStyle } onPress = { () => this.backToDashboard() } title = { 'Nope, all set!' } />
+            <Button style = { buttonStyle } onPress = { () => this.props.addMoreMiscCards() } title = { 'Just a few more...'} />
           </FadeInView>
         </FadeInView>
       </View>
@@ -91,14 +90,14 @@ class AddBudgetScreen extends Component {
         <FormInput onChangeText = { (text) => this.props.affectBudgetItem('amount', text, this.props.budgetItem) } placeholder = '$500' keyboard = 'numeric'/>
         <FormLabel>How often is it due?</FormLabel>
         <Picker style = {{ width: 300 }} onValueChange = { (freq) => {this.props.affectBudgetItem('freq', freq, this.props.budgetItem), this.setState({freq})}} selectedValue = {this.state.freq}>
-          <Picker.Item id = {0} label = 'Daily' value = 'daily' />
-          <Picker.Item id = {1} label = 'Weekly' value = 'weekly' />
-          <Picker.Item id = {2} label = 'Biweekly' value = 'biweekly' />
-          <Picker.Item id = {3} label = 'Monthly' value = 'monthly' />
-          <Picker.Item id = {4} label = 'Bimonthly' value = 'bimonthly' />
-          <Picker.Item id = {5} label = 'Every 3 months' value = '3months' />
-          <Picker.Item id = {6} label = 'Every 6 months' value = '6months' />
-          <Picker.Item id = {7} label = 'Yearly' value = 'yearly' />
+          <Picker.Item label = 'Daily' value = 'daily' />
+          <Picker.Item label = 'Weekly' value = 'weekly' />
+          <Picker.Item label = 'Biweekly' value = 'biweekly' />
+          <Picker.Item label = 'Monthly' value = 'monthly' />
+          <Picker.Item label = 'Bimonthly' value = 'bimonthly' />
+          <Picker.Item label = 'Every 3 months' value = '3months' />
+          <Picker.Item label = 'Every 6 months' value = '6months' />
+          <Picker.Item label = 'Yearly' value = 'yearly' />
         </Picker>
         <Button onPress = { () => this.props.showPicker(true) } title = 'Pick Due Date' />
       </Card>
