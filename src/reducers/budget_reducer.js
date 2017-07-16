@@ -18,8 +18,8 @@ let INITIAL_STATE = {
 }
 
 export default (state = INITIAL_STATE, { type, payload }) => {
-  console.log('in budget_reducer, type is:', type);
-  console.log('payload is:', payload);
+  //console.log('in budget_reducer, type is:', type);
+  //console.log('payload is:', payload);
   switch(type){
     case BUDGET_STEP_CHANGED:
       let newState = { ...state, budgetStep: payload.step };

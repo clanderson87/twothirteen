@@ -16,7 +16,7 @@ class AuthScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    console.log('componentWillRecieveProps is being called with', nextProps.authenticated)
+    //console.log('componentWillRecieveProps is being called with', nextProps.authenticated)
     this.onAuthComplete(nextProps);
   }
 

@@ -93,7 +93,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case TIP_RESTAURANT_CHANGED:
       return { ...state, tipRestaurant: payload };
     case TIP_DATE_CHANGED:
-      console.log('Date changed!', payload, typeof(payload));
+      //console.log('Date changed!', payload, typeof(payload));
       return { ...state, tipDate: payload };
     case TIP_AMOUNT_CHANGED:
       return { ...state, tipAmount: payload.amount, message: payload.message };

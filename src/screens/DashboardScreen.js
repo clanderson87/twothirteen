@@ -27,7 +27,7 @@ class DashboardScreen extends Component {
   goToTipDetail = t => {
     this.props.selectTip(t);
     //this.props.navigation.navigate('detail')
-    console.log('placeholder for navigation to tip detail! for ', t);
+    //console.log('placeholder for navigation to tip detail! for ', t);
   }
 
   goToAddTip = () => {

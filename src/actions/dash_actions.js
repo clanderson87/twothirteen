@@ -75,7 +75,7 @@ const generatePayload = (provided = null, message = null) => {
     let totalObject = providedArr.reduce((totals, tip) => {
       totals.amount += tip.amount;
       totals.hours += tip.hours;
-      console.log('totals is', totals);
+      //console.log('totals is', totals);
       return totals;
     }, { amount: 0, hours: 0 });
 
@@ -85,7 +85,6 @@ const generatePayload = (provided = null, message = null) => {
       hourlyAvg: Math.round(totalObject.amount/totalObject.hours),
       tips: providedArr
     };
-    console.log('payload.hourlyAvg is', payload.hourlyAvg)
   }
   return payload;
 };
@@ -144,6 +143,7 @@ export const getRestaurants = () => {
 
 export const getInitial = () => {
   const { currentUser } = firebase.auth();
+  checkForAndGetBudget();
   return (dispatch) => {
     firebase.database().ref('tips/')
       .orderByChild('uuid').limitToLast(10).equalTo(currentUser.uid)
@@ -225,7 +225,7 @@ export const deleteTip = ({ tId }) => {
 }
 
 export const selectTip = (tip) => {
-  console.log('selectedTip is ', tip);
+  //console.log('selectedTip is ', tip);
   let d = new Date(tip.date);
   tip.date = d;
 
@@ -243,7 +243,7 @@ export const unselectTip = () => {
 };
 
 export const editTip = (tip) => {
-  console.log('editTip.tip is ', tip);
+  //console.log('editTip.tip is ', tip);
 
   return (dispatch) => {
     const QueryLoc = firebase.database().ref('tips');
