@@ -106,7 +106,24 @@ export const checkForBudget = () => async dispatch => {
     console.log('in checkForBudget, error is', e);
     return null;
   }
-}
+};
+
+// export const checkForAndGetBudget = async () => dispatch => {
+  
+//   return (dispatch) => {
+//   firebase.database().ref('budget_items')
+//     .orderByChild('uuid').equalTo(firebase.auth().currentUser.uid)
+//     .on('value', snapshot => {
+//       let budget = Object.values(snapshot.val());
+//       let budgetNumber = null
+//       budget.map((bi, i) => {
+//         return budgetNumber += bi.amount;
+//       });
+//       let action = budgetNumber > 0 ? { type: BUDGET_FOUND, payload: { budget, budgetNumber }} : { type: BUDGET_NOT_FOUND };
+//       dispatch(action);
+//     })
+//   }
+// }
 
 export const getRestaurants = () => {
   const { currentUser } = firebase.auth();

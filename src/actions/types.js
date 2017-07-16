@@ -31,6 +31,7 @@ export const BUDGET_FOUND = 'budget_found';
 
 //budget state
 export const BUDGET_STEP_CHANGED = 'budget_step_changed';
+export const BUDGET_ID_SET = 'budget_id_set';
 export const CATAGORIES_AQUIRED = 'catagories_aquired';
 export const BUDGET_ITEM_AFFECTED = 'budget_item_affected';
 export const BUDGET_ITEM_ADDED_SUCCESS = 'budget_item_added_success';

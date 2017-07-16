@@ -54,6 +54,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, usersTips: payload.tips, usersAverage: payload.avg, usersHourlyAvg: payload.hourlyAvg };
     case BUDGET_FOUND:
       return { ...state, budget: payload };
+      //eturn { ...state, budget: payload.budget, budgetNumber: payload.budgetNumber }; <- after debugging, hopefully
     case BUDGET_NOT_FOUND:
       return { ...state, budget: null };
     case RESTAURANTS_AQUIRED:

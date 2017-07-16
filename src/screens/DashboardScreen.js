@@ -122,7 +122,8 @@ const mapStateToProps = ({ dashboard }) => {
     usersProjected,
     message,
     selectedTip,
-    budget
+    budget,
+    budgetNumber
   } = dashboard;
   return { 
     usersTips,
@@ -131,7 +132,8 @@ const mapStateToProps = ({ dashboard }) => {
     usersProjected,
     message,
     selectedTip,
-    budget
+    budget,
+    budgetNumber
   }
 }
 

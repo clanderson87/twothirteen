@@ -126,6 +126,8 @@ class AddBudgetScreen extends Component {
             cancelTextIOS = 'Go back'
             is24Hour = { false }
           />
+          {Alert.alert( 'Info:', 'Swipe right to save an item to your budget. \nSwipe left to ignore it!',
+          [ {text: 'Ok', onPress: () => {}}])}
         </View>
       )
     };

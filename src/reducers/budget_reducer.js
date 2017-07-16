@@ -39,6 +39,8 @@ export default (state = INITIAL_STATE, { type, payload }) => {
       return { ...state, picker: false };
     case MORE_CARDS_ADDED:
       return { ...state, budgetCatagories: payload };
+    case ERROR: 
+      return { ...state, error: payload };
     default:
       return { ...state };
   };
