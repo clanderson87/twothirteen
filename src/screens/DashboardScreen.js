@@ -9,7 +9,7 @@ import {
   getRestaurants,
   selectTip,
   unselectTip,
-  checkForBudget
+  checkForAndGetBudget
 } from '../actions';
 import { addItemToUser } from '../actions/firebase_helpers';
 
@@ -17,7 +17,7 @@ class DashboardScreen extends Component {
 
   componentDidMount(){
     this.props.getInitial();
-    this.props.checkForBudget();
+    this.props.checkForAndGetBudget();
     if(!this.props.budget){
       this.props.navigation.navigate('AddBudgetScreen');
     }
@@ -142,5 +142,5 @@ export default connect(mapStateToProps, {
   getRestaurants,
   selectTip,
   unselectTip,
-  checkForBudget
+  checkForAndGetBudget
 })(DashboardScreen)
