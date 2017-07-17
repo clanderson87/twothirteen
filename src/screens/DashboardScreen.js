@@ -18,7 +18,7 @@ class DashboardScreen extends Component {
   componentDidMount(){
     this.props.getInitial();
     this.props.checkForAndGetBudget();
-    if(!this.props.budget){
+    if(this.props.budget === 'budget needed'){
       this.props.navigation.navigate('AddBudgetScreen');
     }
     //this.props.getRestaurants();

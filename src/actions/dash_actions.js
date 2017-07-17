@@ -107,19 +107,24 @@ const generatePayload = (provided = null, message = null) => {
 //   }
 // };
 
-export const checkForAndGetBudget = () => async dispatch => {
+export const checkForAndGetBudget = () => {
   console.log('checkForAndGetBudget Being Called!')
   return (dispatch) => {
-    firebase.database().ref('budget_items')
+    firebase.database().ref('budgetItems')
       .orderByChild('uuid').equalTo(firebase.auth().currentUser.uid)
       .on('value', snapshot => {
-        let budget = Object.values(snapshot.val());
-        console.log('snapshot.val is', snapshot.val());
-        let budgetNumber = null
-        budget.map((bi, i) => {
-          return budgetNumber += bi.amount;
-        });
-        let action = budgetNumber > 0 ? { type: BUDGET_FOUND, payload: { budget, budgetNumber }} : { type: BUDGET_NOT_FOUND };
+        let action = {};
+        if(snapshot.val()){
+          let budget = Object.values(snapshot.val());
+          console.log('snapshot.val is', snapshot.val());
+          let budgetNumber = null
+          budget.map((bi, i) => {
+            return budgetNumber += bi.amount;
+          });
+          action = budgetNumber > 0 ? { type: BUDGET_FOUND, payload: { budget, budgetNumber }} : { type: BUDGET_NOT_FOUND };
+        } else {
+          action.type = BUDGET_NOT_FOUND;
+        }
         dispatch(action);
       })
   }
@@ -143,7 +148,6 @@ export const getRestaurants = () => {
 
 export const getInitial = () => {
   const { currentUser } = firebase.auth();
-  checkForAndGetBudget();
   return (dispatch) => {
     firebase.database().ref('tips/')
       .orderByChild('uuid').limitToLast(10).equalTo(currentUser.uid)
