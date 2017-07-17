@@ -132,13 +132,17 @@ class AddBudgetScreen extends Component {
       )
     };
 
-    if(!this.props.budgetId){
+    if(this.props.budgetId === 'budget needed'){
       return (
-        <View style = {fullCentered}>
-          {this.renderBudgetModal()}
+        <View style = { fullCentered }>
+          { this.renderBudgetModal() }
         </View>
       )
-    }    
+    } else {
+      return (
+        <View><Text>This happened</Text></View>
+      )
+    }
   }
   
   componentDidMount = () => {
