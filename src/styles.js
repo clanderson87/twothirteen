@@ -20,6 +20,12 @@ export const slideTextStyle = {
   textAlign: CENTER
 };
 
+export const slideSubTextStyle = {
+  fontSize: 16,
+  color: TUTORIAL_TEXT_COLOR,
+  textAlign: CENTER
+};
+
 export const slideStyle = {
   flex: 1,
   justifyContent: CENTER,
@@ -29,7 +35,7 @@ export const slideStyle = {
 
 export const buttonStyle = {
   backgroundColor: BUTTON_COLOR,
-  marginTop: 15
+  marginVertical: 15
 }
 
 /* ******************** for use with DashboardScreen.js ******************** */

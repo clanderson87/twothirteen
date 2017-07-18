@@ -11,11 +11,11 @@ export const checkForUsage = () => async dispatch => {
     token = await AsyncStorage.getItem('google_token');
   }
 
-  console.log('checkForUsage()! hasUsed = ', hasUsed, 'token is ', token);
+  //console.log('checkForUsage()! hasUsed = ', hasUsed, 'token is ', token);
 
   let action = { type: HAS_USED, payload: { hasUsed, token } };
 
-  console.log('action is', action)
+  //console.log('action is', action)
   if(!hasUsed) {
     dispatch(action);
     AsyncStorage.setItem(versionNumber, 'true');

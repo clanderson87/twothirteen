@@ -12,7 +12,9 @@ import {
   TIP_AMOUNT_CHANGED,
   TIP_NOTES_CHANGED,
   TIP_RATING_CHANGED,
-  STEP_CHANGED
+  STEP_CHANGED,
+  BUDGET_FOUND,
+  BUDGET_NOT_FOUND
 } from '../actions/types';
 
 const DUMMY_RESTAURANTS = [{
@@ -42,13 +44,22 @@ const INITIAL_STATE = {
   tipNotes: '',
   tipRating: 3,
   step: 'amount needed',
-  selectedTip: null
+  selectedTip: null,
+  budget: ''
 };
 
 export default (state = INITIAL_STATE, { type, payload }) => {
   switch(type){
     case GET_INITIAL:
       return { ...state, usersTips: payload.tips, usersAverage: payload.avg, usersHourlyAvg: payload.hourlyAvg };
+    case BUDGET_FOUND:
+      console.log('budget was found!');
+      console.log(payload);
+      //return { ...state, budget: payload };
+      return { ...state, budget: payload.budget, budgetNumber: payload.budgetNumber }; //<- after debugging, hopefully
+    case BUDGET_NOT_FOUND:
+      console.log('budget was not found :(')
+      return { ...state, budget: 'budget needed' };
     case RESTAURANTS_AQUIRED:
       return { ...state, usersRestaurants: payload, tipRestaurant: payload[0].gId }
     case ADD_TIP_SUCCESS:
@@ -83,7 +94,7 @@ export default (state = INITIAL_STATE, { type, payload }) => {
     case TIP_RESTAURANT_CHANGED:
       return { ...state, tipRestaurant: payload };
     case TIP_DATE_CHANGED:
-      console.log('Date changed!', payload, typeof(payload));
+      //console.log('Date changed!', payload, typeof(payload));
       return { ...state, tipDate: payload };
     case TIP_AMOUNT_CHANGED:
       return { ...state, tipAmount: payload.amount, message: payload.message };

@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import AsyncStorage from 'react-native';
 import { 
   GET_INITIAL,
   RESTAURANTS_AQUIRED,
@@ -14,7 +15,9 @@ import {
   TIP_RESTAURANT_CHANGED,
   TIP_NOTES_CHANGED,
   TIP_RATING_CHANGED,
-  STEP_CHANGED
+  STEP_CHANGED,
+  BUDGET_FOUND,
+  BUDGET_NOT_FOUND
 } from './types';
 import { dayOfWeek } from '../common/dateHelpers';
 
@@ -72,7 +75,7 @@ const generatePayload = (provided = null, message = null) => {
     let totalObject = providedArr.reduce((totals, tip) => {
       totals.amount += tip.amount;
       totals.hours += tip.hours;
-      console.log('totals is', totals);
+      //console.log('totals is', totals);
       return totals;
     }, { amount: 0, hours: 0 });
 
@@ -82,12 +85,50 @@ const generatePayload = (provided = null, message = null) => {
       hourlyAvg: Math.round(totalObject.amount/totalObject.hours),
       tips: providedArr
     };
-    console.log('payload.hourlyAvg is', payload.hourlyAvg)
   }
   return payload;
 };
 
 //exported
+
+// export const checkForBudget = () => async dispatch => {
+//   try{
+//     let budgetId = await AsyncStorage.getItem('budgetID');
+//     let action = budgetId ? {
+//       type: BUDGET_FOUND,
+//       payload: budgetId
+//     }
+//     :
+//     { type: BUDGET_NOT_FOUND }
+//     dispatch(action);
+//   } catch (e) {
+//     console.log('in checkForBudget, error is', e);
+//     return null;
+//   }
+// };
+
+export const checkForAndGetBudget = () => {
+  console.log('checkForAndGetBudget Being Called!')
+  return (dispatch) => {
+    firebase.database().ref('budgetItems')
+      .orderByChild('uuid').equalTo(firebase.auth().currentUser.uid)
+      .on('value', snapshot => {
+        let action = {};
+        if(snapshot.val()){
+          let budget = Object.values(snapshot.val());
+          console.log('snapshot.val is', snapshot.val());
+          let budgetNumber = null
+          budget.map((bi, i) => {
+            return budgetNumber += bi.amount;
+          });
+          action = budgetNumber > 0 ? { type: BUDGET_FOUND, payload: { budget, budgetNumber }} : { type: BUDGET_NOT_FOUND };
+        } else {
+          action.type = BUDGET_NOT_FOUND;
+        }
+        dispatch(action);
+      })
+  }
+}
 
 export const getRestaurants = () => {
   const { currentUser } = firebase.auth();
@@ -144,9 +185,8 @@ export const addTip = ({amount, date, restaurant, shift, notes, rating}) => {
       //cuisene type
   };
   return (dispatch) => {
-    const successAddAction = (tip) => {
+    const successAddAction = () => {
       dispatch({
-        payload,
         type: ADD_TIP_SUCCESS
       });
       //navigate here!
@@ -175,23 +215,21 @@ export const deleteTip = ({ tId }) => {
             payload: {
               message: 'tip deleted successfully!'
             }
-          }),
-          //navigate here!
+          })
         )
         .catch(err => dispatch({
             type: DELETE_TIP,
             payload: {
               message: err
             }
-          }),
-          //navigate here!
+          })
         )
       })
   }
 }
 
 export const selectTip = (tip) => {
-  console.log('selectedTip is ', tip);
+  //console.log('selectedTip is ', tip);
   let d = new Date(tip.date);
   tip.date = d;
 
@@ -209,7 +247,7 @@ export const unselectTip = () => {
 };
 
 export const editTip = (tip) => {
-  console.log('editTip.tip is ', tip);
+  //console.log('editTip.tip is ', tip);
 
   return (dispatch) => {
     const QueryLoc = firebase.database().ref('tips');

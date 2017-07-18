@@ -9,6 +9,7 @@ import {
   getRestaurants,
   selectTip,
   unselectTip,
+  checkForAndGetBudget
 } from '../actions';
 import { addItemToUser } from '../actions/firebase_helpers';
 
@@ -16,13 +17,21 @@ class DashboardScreen extends Component {
 
   componentDidMount(){
     this.props.getInitial();
+    this.props.checkForAndGetBudget();
     //this.props.getRestaurants();
   };
+
+  componentWillReceiveProps = nextProps => {
+    console.log(nextProps.budget);
+    if(nextProps.budget === 'budget needed'){
+      this.props.navigation.navigate('AddBudgetScreen');
+    };
+  }
 
   goToTipDetail = t => {
     this.props.selectTip(t);
     //this.props.navigation.navigate('detail')
-    console.log('placeholder for navigation to tip detail! for ', t);
+    //console.log('placeholder for navigation to tip detail! for ', t);
   }
 
   goToAddTip = () => {
@@ -117,6 +126,8 @@ const mapStateToProps = ({ dashboard }) => {
     usersProjected,
     message,
     selectedTip,
+    budget,
+    budgetNumber
   } = dashboard;
   return { 
     usersTips,
@@ -124,7 +135,9 @@ const mapStateToProps = ({ dashboard }) => {
     usersHourlyAvg,
     usersProjected,
     message,
-    selectedTip 
+    selectedTip,
+    budget,
+    budgetNumber
   }
 }
 
@@ -132,5 +145,6 @@ export default connect(mapStateToProps, {
   getInitial,
   getRestaurants,
   selectTip,
-  unselectTip
+  unselectTip,
+  checkForAndGetBudget
 })(DashboardScreen)

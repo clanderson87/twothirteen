@@ -26,3 +26,17 @@ export const TIP_SHIFT_CHANGED = 'tip_shift_changed';
 export const TIP_NOTES_CHANGED = 'tip_notes_changed';
 export const TIP_RATING_CHANGED = 'tip_rating_changed';
 export const STEP_CHANGED = 'step_changed';
+export const BUDGET_NOT_FOUND = 'budget_not_found';
+export const BUDGET_FOUND = 'budget_found';
+
+//budget state
+export const BUDGET_STEP_CHANGED = 'budget_step_changed';
+export const BUDGET_ID_SET = 'budget_id_set';
+export const CATAGORIES_AQUIRED = 'catagories_aquired';
+export const BUDGET_ITEM_AFFECTED = 'budget_item_affected';
+export const BUDGET_ITEM_ADDED_SUCCESS = 'budget_item_added_success';
+export const BUDGET_ITEM_ADDED_FAILED = 'budget_item_add_failed';
+export const DISPLAY_PICKER = 'display_picker';
+export const HIDE_PICKER = 'hide_picker';
+export const MORE_CARDS_ADDED = 'more_cards_added';
+export const UIALERT_DISABLED = 'uialert_disabled';

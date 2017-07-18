@@ -16,7 +16,7 @@ class AuthScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    console.log('componentWillRecieveProps is being called with', nextProps.authenticated)
+    //console.log('componentWillRecieveProps is being called with', nextProps.authenticated)
     this.onAuthComplete(nextProps);
   }
 
@@ -35,7 +35,7 @@ class AuthScreen extends Component {
   }
 
   renderErrorMessage = () => {
-    if (this.props.error){
+    if(this.props.error){
       return (
         <Text>{this.props.error.message}</Text>
       )

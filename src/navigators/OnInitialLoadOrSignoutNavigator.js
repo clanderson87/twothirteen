@@ -3,6 +3,7 @@ import AuthScreen from '../screens/AuthScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import MainFlowTabNavigator from './MainFlowTabNavigator';
 import AddOrEditNavigator from './AddOrEditNavigator';
+import AddBudgetModalNavigator from './AddBudgetModalNavigator';
 
 import { OS } from '../styles';
 
@@ -25,7 +26,8 @@ const OnInitialLoadOrSignoutNavigator = TabNavigator({
 	welcome: { screen: WelcomeScreen },
 	auth: { screen: AuthScreen },
 	main: { screen: MainFlowTabNavigator },
-	AddTip: { screen: AddOrEditNavigator }
+	AddTip: { screen: AddOrEditNavigator },
+	AddBudgetScreen: { screen: AddBudgetModalNavigator }
 }, secondaryNavOptions);
 
 export default OnInitialLoadOrSignoutNavigator;

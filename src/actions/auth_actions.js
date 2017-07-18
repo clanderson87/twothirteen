@@ -49,19 +49,19 @@ const doFacebookLogin = async dispatch => {
 };
 
 const firebaseLogin = (token, dispatch, provider) => {
-  console.log('firebase login being called!');
+  //console.log('firebase login being called!');
   let credential = new String();
   if (provider === 'facebook'){
     credential = firebase.auth.FacebookAuthProvider.credential(token);
   } else if (provider === 'google'){
-    console.log('provider is', provider);
+    //console.log('provider is', provider);
     credential = firebase.auth.GoogleAuthProvider.credential(null, token);
-    console.log('credential is', credential);
+    //console.log('credential is', credential);
   };
 
   firebase.auth().signInWithCredential(credential)
     .then(() => { 
-      console.log('firebase Authentication success!')
+      //console.log('firebase Authentication success!')
       return dispatch({
           type: FIREBASE_AUTHENTICATED
         })
@@ -69,7 +69,7 @@ const firebaseLogin = (token, dispatch, provider) => {
     )
     .catch(error => {
       let _error = handleFirebaseErrors(error, provider);
-      console.log('_error passed to redux is:', _error);
+      //console.log('_error passed to redux is:', _error);
       return dispatch({ type: ERROR, payload: _error });
     });
 }
@@ -80,7 +80,7 @@ export const googleLogin = (token = null) => async dispatch => {
   };
   if (token) {
     firebaseLogin(token, dispatch, 'google');
-    console.log('from googleLogin');
+    //console.log('from googleLogin');
     return dispatch({ type: GOOGLE_LOGIN_SUCCESS, payload: token});
   } else {
     doGoogleLogin(dispatch);
@@ -100,7 +100,7 @@ const doGoogleLogin = async dispatch => {
 
   firebaseLogin(accessToken, dispatch, 'google');
   await AsyncStorage.setItem('google_token', accessToken);
-  console.log('from doGoogleLogin')
+  //console.log('from doGoogleLogin')
   return dispatch({ type: GOOGLE_LOGIN_SUCCESS, payload: accessToken });
 };
 
@@ -173,5 +173,8 @@ const handleFirebaseErrors = (error, provider) => {
     case 'auth/internal-error':
       deleteTokens();
       return { type: 'authError', message: 'Something weird happened on our end. Please try to sign in again and we\'ll try to not suck so much :('}
+    default:
+      deleteTokens();
+      return { type: 'authError', message: 'Please sign in again' }
   }
 }
