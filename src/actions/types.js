@@ -40,3 +40,5 @@ export const DISPLAY_PICKER = 'display_picker';
 export const HIDE_PICKER = 'hide_picker';
 export const MORE_CARDS_ADDED = 'more_cards_added';
 export const UIALERT_DISABLED = 'uialert_disabled';
+
+//restaurant state
