@@ -42,3 +42,4 @@ export const MORE_CARDS_ADDED = 'more_cards_added';
 export const UIALERT_DISABLED = 'uialert_disabled';
 
 //restaurant state
+export const RESTAURANT_INPUT = 'restaurant_input';

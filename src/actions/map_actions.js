@@ -1,4 +1,4 @@
-import { REGION_SET, ERROR } from './types';
+import { REGION_SET, RESTAURANT_INPUT, ERROR } from './types';
 import { Location, Permissions } from 'expo';
 import { getPermissions } from './expo_common_helpers';
 import { getLocationOptions, initialZoom } from '../CUSTOM_CONFIG';
@@ -9,7 +9,6 @@ export const setRegion = (region) => {
     payload: region
   }
 };
-
 
 // Expo docs about 'Location' object: https://docs.expo.io/versions/v17.0.0/sdk/location.html
 // May need to update vNumber.
@@ -43,4 +42,12 @@ export const getInitialRegion = () => async dispatch => {
         payload: 'Please enable Location Services!'
       })
     }
+};
+
+export const setInput = input => {
+  return { type: RESTAURANT_INPUT, payload: input };
+}
+
+export const uploadInputToSearch = input => {
+
 };
