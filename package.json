@@ -6,6 +6,7 @@
   "private": true,
   "main": "main.js",
   "dependencies": {
+    "@google/maps": "^0.4.2",
     "axios": "^0.16.1",
     "dtrace-provider": "^0.8.3",
     "expo": "^18.0.1",
