@@ -1,15 +1,28 @@
-const key = require('../src/secrets/GOOGLE_PLACES_API_KEY');
+// const key = require('../src/secrets/GOOGLE_PLACES_API_KEY');
 
 const https = require('https');
+
 const options = {
-    hostname: 'maps.googleapis.com/maps/api/place/textsearch/json?query=',
-    path: 'the%20southern%20steak%20and%20oyster+&key=' + key + '&type=restaurant',
+    hostname: 'maps.googleapis.com',
+    path: '/maps/api/place/textsearch/json?query=the%20southern%20steak%20and%20oyster+&key=' + '' + '&type=restaurant',
     method: 'GET'
 };
-    
-    const req = https.requestt(options, (res) => {
-        res.on('data', (d) => {
-            console.log(d)
-        });
-    req.send();
+
+https.get(options, (res) => {
+    let rawData = '';
+    res.on('data', (c) => { rawData += c })
+    res.on('end', () => {
+        try{
+            let parsedData = JSON.parse(rawData);
+            offerResults(parsedData.results);
+        } catch(e) {
+            console.log('Error is', e.message);
+        }
     });
+});
+
+const offerResults = data => {
+    return data;
+}
+
+console.log(offerResults());
