@@ -13,15 +13,7 @@ class MapScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    try {
-      if(nextProps.error.hasOwnProperty('type')){
-        if (nextProps.error.type === 'authError'){
-          this.props.navigation.navigate('auth')
-        }
-      }
-    } catch (e){
-      console.log(e);  
-    }
+    
   }
 
   onRegionChangeComplete = (region) => {
