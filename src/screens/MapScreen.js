@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Dimensions } from 'react-native';
 import { MapView } from 'expo';
 import { connect } from 'react-redux';
 import { FormInput } from 'react-native-elements';
 import { fullScreen, fullCentered } from '../styles';
-import { getInitialRegion, setRegion } from '../actions';
-import GOOGLE_PLACES_API_KEY from '../secrets/GOOGLE_PLACES_API_KEY';
+import { getInitialRegion, setRegion, setInput, uploadInputToSearch } from '../actions';
 
 class MapScreen extends Component {
   componentDidMount(){
@@ -21,12 +20,33 @@ class MapScreen extends Component {
   }
 
   render() {
+    let topSearchOffset = Math.round(Dimensions.get('window').height * 0.1);
+    let sideSearchOffset = Math.round(Dimensions.get('window').width * 0.1);
     if(this.props.region){
       return (
         <View style = { fullScreen }>
-          <FormInput />
+          <FormInput
+            containerStyle = {{
+              zIndex: 500,
+              alignSelf: 'center',
+              position: 'absolute',
+              top: topSearchOffset,
+              left: sideSearchOffset,
+              right: sideSearchOffset,
+              shadowColor: "#000000",
+              shadowOpacity: 0.8,
+              shadowRadius: 2,
+              shadowOffset: {
+                height: 1,
+                width: 0
+              }
+            }}
+            placeholder = 'search'
+            onChangeText = { (text) => this.props.setInput(text) }
+            value = {this.props.input}
+            onEndEditing = { () => this.props.uploadInputToSearch(this.props.input, this.props.region)} />
           <MapView 
-            style = { fullScreen } 
+            style = {{ flex: 4 }} 
             region = { this.props.region }
             onRegionChangeComplete = { this.onRegionChangeComplete }/>
         </View>
@@ -42,11 +62,13 @@ class MapScreen extends Component {
 }
 
 const mapStateToProps = ({ map }) => {
-  const { region, error } = map;
-  return { region, error }
+  const { region, error, input } = map;
+  return { region, error, input };
 };
 
 export default connect(mapStateToProps, { 
   getInitialRegion,
-  setRegion
+  setRegion,
+  setInput,
+  uploadInputToSearch
 })(MapScreen);
