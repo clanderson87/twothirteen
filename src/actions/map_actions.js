@@ -1,6 +1,7 @@
 import { REGION_SET, RESTAURANT_INPUT, ERROR, SEARCH_SUCCESS } from './types';
 import { Location, Permissions } from 'expo';
 import firebase from 'firebase';
+import axios from 'axios';
 import { OS } from '../styles';
 import { getPermissions } from './expo_common_helpers';
 import { getLocationOptions, initialZoom } from '../CUSTOM_CONFIG';
@@ -73,28 +74,28 @@ export const uploadInputToSearch = (requestTerm, region = null) => dispatch => {
     body.latitude = region.latitude, 
     body.longitude = region.longitude
   ) : null;
-  //headers = JSON.stringify(headers);
-  console.log('body is now:', body);
+
+  headers = {
+    'x-api-key': OS === 'android' ? androidKey : iOSKey,
+    'Content-Type': 'application/json'
+  }
+
+  body = JSON.stringify(body);
+  // headers = JSON.stringify(headers);
+
   let type = '';
   let payload = {};
   const dispatchAction = () => dispatch({type, payload});
-  fetch(AWS_URL, {
-      method: 'POST',
-      headers: {
-        'x-api-key': OS === 'android' ? androidKey : iOSKey,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(body)
-    })
+  
+  axios.post(AWS_URL, body, {headers})
     .then((resp) => {
-      console.log(resp);
       type = SEARCH_SUCCESS;
-      payload = resp;
+      console.log(resp.data);
+      payload = resp.data;
       dispatchAction();
     })
-    .catch(err => {
-      console.log('in uploadInputToSearch, error is ', err)
+    .catch((err) => {
+      console.log(err)
       type = ERROR;
       payload = err;
       dispatchAction();

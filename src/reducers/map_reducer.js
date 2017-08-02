@@ -12,6 +12,8 @@ export default (state = {}, { type, payload}) => {
     case RESTAURANT_INPUT:
       return { ...state, input: payload };
     case SEARCH_SUCCESS:
+      console.log(typeof(payload));
+      console.log(payload);
       return { ...state, results: payload }
     case ERROR:
       //console.log('in Map Reducer, error is', payload);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, ActivityIndicator, Dimensions } from 'react-native';
 import { MapView } from 'expo';
 import { connect } from 'react-redux';
-import { FormInput } from 'react-native-elements';
+import { FormInput, List, ListItem } from 'react-native-elements';
 import { fullScreen, fullCentered } from '../styles';
 import { getInitialRegion, setRegion, setInput, uploadInputToSearch } from '../actions';
 
@@ -25,8 +25,8 @@ class MapScreen extends Component {
     if(this.props.region){
       return (
         <View style = { fullScreen }>
-          <FormInput
-            containerStyle = {{
+          <View
+            style = {{
               zIndex: 500,
               alignSelf: 'center',
               position: 'absolute',
@@ -40,11 +40,20 @@ class MapScreen extends Component {
                 height: 1,
                 width: 0
               }
-            }}
-            placeholder = 'search'
-            onChangeText = { (text) => this.props.setInput(text) }
-            value = {this.props.input}
-            onEndEditing = { () => this.props.uploadInputToSearch(this.props.input, this.props.region)} />
+            }}>
+            <FormInput 
+              placeholder = 'search'
+              onChangeText = { (text) => this.props.setInput(text) }
+              value = {this.props.input}
+              onEndEditing = { () => this.props.uploadInputToSearch(this.props.input, this.props.region)} />
+            { this.props.results && this.props.results.length > 1 ? <List>{ this.props.results.map((rest, i) => (
+              <ListItem
+                key = {i}
+                title = {rest.name}
+                subtitle = {rest.address}
+                onPress = {() => console.log(rest.name)}
+              /> ))}</List> : null }
+            </View>
           <MapView 
             style = {{ flex: 4 }} 
             region = { this.props.region }
@@ -62,8 +71,8 @@ class MapScreen extends Component {
 }
 
 const mapStateToProps = ({ map }) => {
-  const { region, error, input } = map;
-  return { region, error, input };
+  const { region, error, input, results } = map;
+  return { region, error, input, results };
 };
 
 export default connect(mapStateToProps, { 
