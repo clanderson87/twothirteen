@@ -53,7 +53,7 @@ export const setInput = input => {
 }
 
 const sanitizeInput = input => {
-  input = input.replace(' ', '%20');
+  input = input.replace(/\s/g, '%20');
   return input;
 };
 
@@ -87,10 +87,12 @@ export const uploadInputToSearch = (requestTerm, region = null) => dispatch => {
   let payload = {};
   const dispatchAction = () => dispatch({type, payload});
   
+  console.log(body);
+
   axios.post(AWS_URL, body, {headers})
     .then((resp) => {
+      console.log(resp);
       type = SEARCH_SUCCESS;
-      console.log(resp.data);
       payload = resp.data;
       dispatchAction();
     })
@@ -99,5 +101,6 @@ export const uploadInputToSearch = (requestTerm, region = null) => dispatch => {
       type = ERROR;
       payload = err;
       dispatchAction();
+      //need to catch the 404 error here.
     });
 };
