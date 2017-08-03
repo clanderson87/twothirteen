@@ -1,4 +1,4 @@
-import { REGION_SET, RESTAURANT_INPUT, ERROR, SEARCH_SUCCESS } from './types';
+import { REGION_SET, RESTAURANT_INPUT, ERROR, SEARCH_SUCCESS, HIDE_RESULTS, SET_RESTAURANT, RESTAURANT_ADD_SUCCESS } from './types';
 import { Location, Permissions } from 'expo';
 import firebase from 'firebase';
 import axios from 'axios';
@@ -22,6 +22,7 @@ export const getInitialRegion = () => async dispatch => {
     if (status === 'granted'){
       let location = await Location.getCurrentPositionAsync(getLocationOptions);
       if(location !== null){
+        console.log(location)
         const { latitude, longitude } = location.coords;
         const { longitudeDelta, latitudeDelta } = initialZoom;
         const region = {
@@ -30,6 +31,7 @@ export const getInitialRegion = () => async dispatch => {
               longitudeDelta,
               latitudeDelta
             };
+        console.log(region)
         return dispatch({
           type: REGION_SET,
           payload: region
@@ -97,10 +99,62 @@ export const uploadInputToSearch = (requestTerm, region = null) => dispatch => {
       dispatchAction();
     })
     .catch((err) => {
-      console.log(err)
-      type = ERROR;
-      payload = err;
+      if(err.response.status === 404){
+        type = SEARCH_SUCCESS;
+        payload = [{ name: 'No results', address: 'We couldn\'t find anything by that name nearby :(', clear: true }];
+      } else {
+        type = ERROR;
+        payload = err;
+      }
       dispatchAction();
-      //need to catch the 404 error here.
     });
 };
+
+export const hideResults = () => {
+  return {
+    type: HIDE_RESULTS
+  }
+}
+
+export const setRestaurant = rest => {
+  return {
+    type: SET_RESTAURANT,
+    payload: rest
+  }
+}
+
+export const saveRestaurant = rest => async dispatch => {
+  const { gId, name } = rest;
+  
+  let type = '';
+  let payload = {};
+
+  const { currentUser } = firebase.auth();
+
+  const initialAdd = () => {
+    firebase.database().ref('restaurants').push({name, gId});
+  };
+
+  const dispatchAction = () => {
+    dispatch({type, payload});
+  };
+
+  firebase.database().ref(`users/${currentUser.uid}/restaurants`).push({ name, gId })
+    .then(
+      firebase.database().ref('restaurants')
+        .orderByChild('gId')
+        .equalTo(gId)
+        .on((snapshot) => {
+          if (!snapshot.exists()){
+            initialAdd();
+          }
+        },
+        type = RESTAURANT_ADD_SUCCESS,
+        dispatchAction()
+    ))
+      .catch(err => {
+        type = ERROR;
+        payload = err;
+        dispatchAction()
+      }) 
+}

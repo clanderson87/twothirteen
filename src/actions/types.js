@@ -44,3 +44,6 @@ export const UIALERT_DISABLED = 'uialert_disabled';
 //restaurant state
 export const RESTAURANT_INPUT = 'restaurant_input';
 export const SEARCH_SUCCESS = 'search_success';
+export const HIDE_RESULTS = 'hide_results';
+export const SET_RESTAURANT = 'set_restaurant';
+export const RESTAURANT_ADD_SUCCESS = 'restaurant_add_success';
