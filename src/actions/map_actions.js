@@ -1,4 +1,12 @@
-import { REGION_SET, RESTAURANT_INPUT, ERROR, SEARCH_SUCCESS, HIDE_RESULTS, SET_RESTAURANT, RESTAURANT_ADD_SUCCESS } from './types';
+import { REGION_SET, 
+  RESTAURANT_INPUT, 
+  ERROR, 
+  SEARCH_SUCCESS, 
+  HIDE_RESULTS, 
+  SET_RESTAURANT, 
+  RESTAURANT_ADD_SUCCESS,
+  RESET_RESTAURANT_SELECTION
+} from './types';
 import { Location, Permissions } from 'expo';
 import firebase from 'firebase';
 import axios from 'axios';
@@ -95,6 +103,13 @@ export const uploadInputToSearch = (requestTerm, region = null) => dispatch => {
     .then((resp) => {
       console.log(resp);
       type = SEARCH_SUCCESS;
+      // //if(resp.data.length > 5){
+      //   let i = 0;
+      //   while( i < resp.data.length ){
+      //     let segment = resp.data.splice(i, i + 5);
+      //     payload.
+      //   }
+      // };
       payload = resp.data;
       dispatchAction();
     })
@@ -144,7 +159,8 @@ export const saveRestaurant = rest => async dispatch => {
       firebase.database().ref('restaurants')
         .orderByChild('gId')
         .equalTo(gId)
-        .on((snapshot) => {
+        .once('value')
+        .then(snapshot => {
           if (!snapshot.exists()){
             initialAdd();
           }
@@ -157,4 +173,11 @@ export const saveRestaurant = rest => async dispatch => {
         payload = err;
         dispatchAction()
       }) 
+};
+
+export const resetRestaurantSelection = arg => {
+  return {
+    type: RESET_RESTAURANT_SELECTION,
+    payload: arg
+  }
 }

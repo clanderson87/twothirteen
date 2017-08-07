@@ -47,3 +47,4 @@ export const SEARCH_SUCCESS = 'search_success';
 export const HIDE_RESULTS = 'hide_results';
 export const SET_RESTAURANT = 'set_restaurant';
 export const RESTAURANT_ADD_SUCCESS = 'restaurant_add_success';
+export const RESET_RESTAURANT_SELECTION = 'reset_restaurant_selection';

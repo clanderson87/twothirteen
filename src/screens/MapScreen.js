@@ -4,7 +4,14 @@ import { MapView } from 'expo';
 import { connect } from 'react-redux';
 import { FormInput, List, ListItem, Button } from 'react-native-elements';
 import { fullScreen, fullCentered } from '../styles';
-import { getInitialRegion, setRegion, setInput, uploadInputToSearch, hideResults, setRestaurant, saveRestaurant } from '../actions';
+import { getInitialRegion, 
+  setRegion, 
+  setInput, 
+  uploadInputToSearch, 
+  hideResults, 
+  setRestaurant, 
+  saveRestaurant,
+  resetRestaurantSelection } from '../actions';
 
 class MapScreen extends Component {
   componentDidMount(){
@@ -30,6 +37,12 @@ class MapScreen extends Component {
     };
     this.props.setRegion(newRegion);
     this.props.hideResults();
+  }
+
+  resetRestaurantSelection = () => {
+    if(this.props.oldResults){
+      this.props.resetRestaurantSelection(this.props.oldResults);
+    }
   }
 
   render() {
@@ -74,7 +87,13 @@ class MapScreen extends Component {
           <MapView 
             style = {{ flex: 4 }} 
             region = { this.props.region }
-            onRegionChangeComplete = { this.onRegionChangeComplete }/>
+            onRegionChangeComplete = { this.onRegionChangeComplete }>
+          { this.props.rest ? 
+           <MapView.Marker
+             coordinate = {{ longitude: this.props.rest.locLng, latitude: this.props.rest.locLat }}
+             title = { this.props.rest.name } 
+             description = { this.props.rest.address }/> : null }
+          </MapView>
           { this.props.rest ? 
           <View style = {{
             flexDirection: 'row',
@@ -105,8 +124,24 @@ class MapScreen extends Component {
                 height: 1,
                 width: 0
               }
-            }} title = 'Back' onPress = { () => console.log('Back!') } />
-          </View> : null }
+            }} title = 'Back' onPress = { () => this.resetRestaurantSelection() } />
+          </View> : 
+            <Button containerViewStyle = {{
+              flex: 1,
+              zIndex: 500,
+              shadowColor: "#000000",
+              shadowOpacity: 0.8,
+              shadowRadius: 2,
+              shadowOffset: {
+                height: 1,
+                width: 0
+              },
+              bottom: topSearchOffset,
+              left: sideSearchOffset,
+              right: sideSearchOffset,
+              alignSelf: 'center',
+              position: 'absolute'
+            }} title = 'Back' onPress = { () => console.log('Back!') } /> }
         </View>
       )
     } else {
@@ -120,8 +155,8 @@ class MapScreen extends Component {
 }
 
 const mapStateToProps = ({ map }) => {
-  const { region, error, input, results, rest } = map;
-  return { region, error, input, results, rest };
+  const { region, error, input, results, rest, oldResults } = map;
+  return { region, error, input, results, rest, oldResults };
 };
 
 export default connect(mapStateToProps, { 
@@ -131,5 +166,6 @@ export default connect(mapStateToProps, {
   uploadInputToSearch,
   hideResults,
   setRestaurant,
-  saveRestaurant
+  saveRestaurant,
+  resetRestaurantSelection
 })(MapScreen);

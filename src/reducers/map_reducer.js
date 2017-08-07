@@ -5,10 +5,11 @@ import {
   HIDE_RESULTS,
   SET_RESTAURANT,
   RESTAURANT_ADD_SUCCESS,
-  ERROR
+  ERROR,
+  RESET_RESTAURANT_SELECTION
 } from '../actions/types';
 
-export default (state = {}, { type, payload}) => {
+export default (state = {}, { type, payload }) => {
   switch(type){
     case REGION_SET:
       return { ...state, region: payload };
@@ -23,8 +24,10 @@ export default (state = {}, { type, payload}) => {
       return { ...state, rest: payload };
     case RESTAURANT_ADD_SUCCESS:
       return { ...state, results: null, oldResults: null, rest: null, input: null };
+    case RESET_RESTAURANT_SELECTION:
+      return { ...state, results: payload, oldResults: null, rest: null };
     case ERROR:
-      //console.log('in Map Reducer, error is', payload);
+      console.log('in Map Reducer, error is', payload);
       return { ...state, error: payload };
     default:
       return state;
