@@ -40,3 +40,12 @@ export const DISPLAY_PICKER = 'display_picker';
 export const HIDE_PICKER = 'hide_picker';
 export const MORE_CARDS_ADDED = 'more_cards_added';
 export const UIALERT_DISABLED = 'uialert_disabled';
+
+//restaurant state
+export const RESTAURANT_INPUT = 'restaurant_input';
+export const SEARCH_SUCCESS = 'search_success';
+export const HIDE_RESULTS = 'hide_results';
+export const SET_RESTAURANT = 'set_restaurant';
+export const RESTAURANT_ADD_SUCCESS = 'restaurant_add_success';
+export const RESET_RESTAURANT_SELECTION = 'reset_restaurant_selection';
+export const DISPLAY_MORE_RESULTS = 'display_more_results';
