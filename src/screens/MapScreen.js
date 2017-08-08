@@ -11,7 +11,9 @@ import { getInitialRegion,
   hideResults, 
   setRestaurant, 
   saveRestaurant,
-  resetRestaurantSelection } from '../actions';
+  resetRestaurantSelection,
+  displayMoreResults
+} from '../actions';
 
 class MapScreen extends Component {
   componentDidMount(){
@@ -73,7 +75,7 @@ class MapScreen extends Component {
               onChangeText = { (text) => this.props.setInput(text) }
               value = {this.props.input}
               onEndEditing = { () => this.props.uploadInputToSearch(this.props.input, this.props.region)} />
-            { this.props.results && this.props.results.length > 0 ? 
+            { this.props.results && this.props.results.length && this.props.input.length > 2 ? 
               <List>{ this.props.results.map((rest, i) => (
                 <ListItem
                   key = {i}
@@ -81,7 +83,15 @@ class MapScreen extends Component {
                   subtitle = {rest.address}
                   onPress = {() => this.selectRestaurant(rest)}
                 /> ))
-              }</List> 
+              }
+                { this.props.fullResults && this.props.fullResults.length ? 
+                  <ListItem 
+                    key = '<24323wfqwsdf>wetfsf</24323wfqwsdf>'
+                    title = 'More'
+                    onPress = {() => this.props.displayMoreResults() } 
+                  /> : null
+                }
+              </List> 
               : null }
             </View>
           <MapView 
@@ -155,8 +165,8 @@ class MapScreen extends Component {
 }
 
 const mapStateToProps = ({ map }) => {
-  const { region, error, input, results, rest, oldResults } = map;
-  return { region, error, input, results, rest, oldResults };
+  const { region, error, input, results, rest, oldResults, fullResults } = map;
+  return { region, error, input, results, rest, oldResults, fullResults };
 };
 
 export default connect(mapStateToProps, { 
@@ -167,5 +177,6 @@ export default connect(mapStateToProps, {
   hideResults,
   setRestaurant,
   saveRestaurant,
-  resetRestaurantSelection
+  resetRestaurantSelection,
+  displayMoreResults
 })(MapScreen);

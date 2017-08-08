@@ -5,7 +5,8 @@ import { REGION_SET,
   HIDE_RESULTS, 
   SET_RESTAURANT, 
   RESTAURANT_ADD_SUCCESS,
-  RESET_RESTAURANT_SELECTION
+  RESET_RESTAURANT_SELECTION,
+  DISPLAY_MORE_RESULTS
 } from './types';
 import { Location, Permissions } from 'expo';
 import firebase from 'firebase';
@@ -67,6 +68,15 @@ const sanitizeInput = input => {
   return input;
 };
 
+const breakUpPayload = array => {
+  let payload = [];
+  for(let i = 0; i < array.length; i += 5){
+    payload.push(array.slice(i, i + 5))
+  }
+  console.log('payload is', payload);
+  return payload;
+}
+
 export const uploadInputToSearch = (requestTerm, region = null) => dispatch => {
   requestTerm = sanitizeInput(requestTerm);
   let body = {
@@ -91,7 +101,6 @@ export const uploadInputToSearch = (requestTerm, region = null) => dispatch => {
   }
 
   body = JSON.stringify(body);
-  // headers = JSON.stringify(headers);
 
   let type = '';
   let payload = {};
@@ -101,19 +110,21 @@ export const uploadInputToSearch = (requestTerm, region = null) => dispatch => {
 
   axios.post(AWS_URL, body, {headers})
     .then((resp) => {
-      console.log(resp);
+      console.log('resp.data is:', resp.data);
       type = SEARCH_SUCCESS;
-      // //if(resp.data.length > 5){
-      //   let i = 0;
-      //   while( i < resp.data.length ){
-      //     let segment = resp.data.splice(i, i + 5);
-      //     payload.
-      //   }
-      // };
-      payload = resp.data;
+      if(resp.data.length > 5){
+        let fullPayload = breakUpPayload(resp.data);
+        payload = { initialSet: fullPayload[0] };
+        fullPayload.shift();
+        payload.remaining = fullPayload;
+        console.log(payload);
+      } else {
+        payload = { initialSet: resp.data };
+      }
       dispatchAction();
     })
     .catch((err) => {
+      console.log(err);
       if(err.response.status === 404){
         type = SEARCH_SUCCESS;
         payload = [{ name: 'No results', address: 'We couldn\'t find anything by that name nearby :(', clear: true }];
@@ -129,14 +140,14 @@ export const hideResults = () => {
   return {
     type: HIDE_RESULTS
   }
-}
+};
 
 export const setRestaurant = rest => {
   return {
     type: SET_RESTAURANT,
     payload: rest
   }
-}
+};
 
 export const saveRestaurant = rest => async dispatch => {
   const { gId, name } = rest;
@@ -179,5 +190,11 @@ export const resetRestaurantSelection = arg => {
   return {
     type: RESET_RESTAURANT_SELECTION,
     payload: arg
+  }
+};
+
+export const displayMoreResults = () => {
+  return {
+    type: DISPLAY_MORE_RESULTS
   }
 }
