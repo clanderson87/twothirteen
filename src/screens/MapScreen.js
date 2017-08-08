@@ -26,6 +26,10 @@ class MapScreen extends Component {
 
   onRegionChangeComplete = (region) => {
     this.props.setRegion(region);
+  };
+
+  navigateBackToDash = () => {
+    this.props.navigation.navigate('Dashboard');
   }
 
   selectRestaurant = rest => {
@@ -50,7 +54,6 @@ class MapScreen extends Component {
   render() {
     let topSearchOffset = Math.round(Dimensions.get('window').height * 0.1);
     let sideSearchOffset = Math.round(Dimensions.get('window').width * 0.1);
-    let buttonBottomOffset = Math.round(Dimensions.get('window').height * 0.1);
     if(this.props.region){
       return (
         <View style = { fullScreen }>
@@ -123,9 +126,9 @@ class MapScreen extends Component {
                 height: 1,
                 width: 0
               }
-            }} title = 'Save' onPress = { () => this.props.saveRestaurant(this.props.rest) } />
+            }} title = '<' onPress = { () => this.resetRestaurantSelection() } />
             <Button containerViewStyle = {{
-              flex: 1,
+              flex: 3.5,
               zIndex: 500,
               shadowColor: "#000000",
               shadowOpacity: 0.8,
@@ -134,7 +137,7 @@ class MapScreen extends Component {
                 height: 1,
                 width: 0
               }
-            }} title = 'Back' onPress = { () => this.resetRestaurantSelection() } />
+            }} title = 'Save' onPress = { () => this.props.saveRestaurant(this.props.rest) } />
           </View> : 
             <Button containerViewStyle = {{
               flex: 1,
@@ -151,7 +154,7 @@ class MapScreen extends Component {
               right: sideSearchOffset,
               alignSelf: 'center',
               position: 'absolute'
-            }} title = 'Back' onPress = { () => console.log('Back!') } /> }
+            }} title = 'Cancel' onPress = { () => this.navigateBackToDash() } /> }
         </View>
       )
     } else {
